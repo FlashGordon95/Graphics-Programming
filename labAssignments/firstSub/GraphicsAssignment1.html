@@ -1,0 +1,78 @@
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Canvas</title>
+
+        <style type="text/css">
+        body {
+         background-color: white;
+        }
+        </style>
+    </head>
+
+    <body>
+
+        <canvas id="canvas-for-ball" width="700" height="500" style="border:1px solid #000000;">></canvas>
+        <button onclick="drawCirc()">Press to generate circle</button>
+        <script type="text/javascript">
+        // Gets a handle to the element with id canvasOne.
+        var canvas = document.getElementById("canvas-for-ball");
+        // Get a 2D context for the canvas.
+        var ctx = canvas.getContext("2d");
+
+
+        //Set a timeout for a ball to appear
+        
+        
+        // The vertical axis ctx.
+        var y = 10;
+        var x = 50;
+        function drawCirc(){
+            setTimeout(function(){ 
+                ctx.endPath();
+            
+            ctx.beginPath();
+            ctx.arc(x, y, 3, 0, 2 * Math.PI);
+            ctx.stroke();
+            }, 3000);
+        }
+
+        // A function to repeat every time the animation loops.
+        function drawPixel() {
+            //Drawing the ball alone does not clear the previous position of the ball at any point
+            //to do this we would either need to clear the pixel area where the ball is taking up
+            //or clear the entire canvas and redraw. 
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Draw the ball (stroked, not filled).
+            
+            ctx.beginPath();
+            
+            ctx.arc(x, y, 3, 0, 2 * Math.PI);
+            ctx.stroke();
+            
+            // Update the y location.
+            if (y<400){
+                
+                //Update when Y is 400 is less
+                y += 1;
+                console.log("\nStopped at Y pixel: "+y);
+            }
+            else{
+                //When Y exceeds 400
+                x+=1;
+                console.log("\nMoving X pixel to: "+x);
+                
+            }
+
+            
+            window.requestAnimationFrame(drawPixel);
+        }
+        
+        
+        // Get the animation going.
+        drawPixel();
+        </script>
+    </body>
+    </html>
