@@ -1,0 +1,100 @@
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Canvas</title>
+        <!--Ryan Gordon - G00326349 - Graphics programming -->
+
+        <style type="text/css">
+        body {
+         background-color: white;
+        }
+        </style>
+    </head>
+
+    <body>
+
+        <canvas id="canvas-for-ball" width="700" height="500" style="border:1px solid #000000;">></canvas>
+        <script type="text/javascript">
+        // Gets a handle to the element with id canvasOne.
+        var canvas = document.getElementById("canvas-for-ball");
+        // Get a 2D context for the canvas.
+        var ctx = canvas.getContext("2d");
+        //Define starting positions
+        //Test these definitions in the broswer console
+        var xpos = 100;
+        var ypos = 100;
+        var radius = 100;
+        var startPos;
+        var pizzaSlices = 7;
+        function toRadians(deg) {
+    return deg * Math.PI / 180
+}
+function doSetTimeout(i) {
+  setTimeout(function() { thePizza.draw() }, 3000);
+}
+
+        function increasePosition(byHowMuchX, byHowMuchY){
+            xpos = xpos + byHowMuchX;
+            ypos = ypos + byHowMuchY;
+
+        }
+        var thePizza= {
+            name: "PizzaMcPizzaFace"
+            , xpos: canvas.width/2
+            , ypos: canvas.height/2
+            , radius:100
+            , startPos: 0
+            , endPos: 45
+            , increasePosition: function(byHowMuchX, byHowMuchY) {
+            this.xpos = this.xpos + byHowMuchX;
+            this.ypos = this.ypos + byHowMuchY;
+            console.log("Ball now has these coordinates" +this.xpos + this.ypos)
+        }
+        , resize: function(r) {
+            this.radius = this.radius + r;
+            this.radius = this.radius + r;
+        }
+        , draw: function() {
+            ctx.beginPath();
+            ctx.moveTo(this.xpos, this.ypos);
+            ctx.arc(this.xpos, this.ypos, this.radius,toRadians(this.startPos),toRadians(this.endPos));
+            ctx.fillStyle = '#FEFFA2';
+            ctx.lineTo(this.xpos,this.ypos);
+            ctx.fill();
+            ctx.strokeStyle = 'black';
+            ctx.stroke();
+            ctx.closePath();
+            
+
+           
+
+            console.log("Drawing ball at " +this.xpos+this.ypos);
+            console.log("Incrementing the pos"+this.startPos);
+            this.startPos= this.startPos + 45;
+            this.endPos= this.endPos + 45;
+            console.log("pos"+this.startPos);
+        }
+        };
+
+         var pizzaDraw =setInterval(function(){ thePizza.draw() }, 3000);
+         setTimeout(function() { clearInterval(pizzaDraw) }, 21000);
+
+
+         ctx.beginPath();
+      ctx.arc(thePizza.xpos, thePizza.ypos, (thePizza.radius+5),0,2 * Math.PI);
+      ctx.fillStyle = '#8B4513';
+      ctx.fill();
+
+        /*
+        for(var i=0; i<pizzaSlices; i++){
+            
+            
+            doSetTimeout(i);
+        }
+        */
+        
+        
+        </script>
+    </body>
+    </html>
