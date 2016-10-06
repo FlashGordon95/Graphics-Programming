@@ -53,6 +53,7 @@
             this.radius = this.radius + r;
         }
         , draw: function() {
+            //Draw a sector that is 1/8 of a full circle
             ctx.beginPath();
             ctx.moveTo(this.xpos, this.ypos);
             ctx.arc(this.xpos, this.ypos, this.radius,toRadians(this.startPos),toRadians(this.endPos));
@@ -63,13 +64,13 @@
             ctx.stroke();
             ctx.closePath();
             
-
+            //This draws a pepperoni
             ctx.beginPath();
             ctx.arc(this.xpos+30, this.ypos, this.radius/10, toRadians(this.startPos+45),1*Math.PI);
             ctx.fillStyle = 'red';
             ctx.fill();
             ctx.closePath();
-
+            Log this to user
             console.log("Drawing ball at " +this.xpos+this.ypos);
             console.log("Incrementing the pos"+this.startPos);
             this.startPos= this.startPos + 45;
@@ -81,7 +82,7 @@
          var pizzaDraw =setInterval(function(){ thePizza.draw() }, 3000);
          setTimeout(function() { clearInterval(pizzaDraw) }, 21000);
 
-
+         //Draw the crust 
          ctx.beginPath();
       ctx.arc(thePizza.xpos, thePizza.ypos, (thePizza.radius+5),0,2 * Math.PI);
       ctx.fillStyle = '#8B4513';
