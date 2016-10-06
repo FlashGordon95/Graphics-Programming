@@ -1,0 +1,76 @@
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Canvas</title>
+        <!--Ryan Gordon - G00326349 - Graphics programming -->
+
+        <style type="text/css">
+        body {
+         background-color: white;
+        }
+        </style>
+    </head>
+
+    <body>
+
+        <canvas id="canvas-for-ball" width="700" height="500" style="border:1px solid #000000;">></canvas>
+        <script type="text/javascript">
+        // Gets a handle to the element with id canvasOne.
+        var canvas = document.getElementById("canvas-for-ball");
+        // Get a 2D context for the canvas.
+        var ctx = canvas.getContext("2d");
+        //Define starting positions
+        //Test these definitions in the broswer console
+        var xpos = 10;
+        var ypos = 10;
+        var radius = 2;
+        //these are not used for the ball object, this is shown by the 'this' keyword
+
+        function increasePosition(byHowMuchX, byHowMuchY){
+            xpos = xpos + byHowMuchX;
+            ypos = ypos + byHowMuchY;
+
+        }
+        //theBall object is a JS object that contains a novelty name, x, y, r parametrers and some functions to modify these 
+        var theBall = {
+            name: "Harambe"
+            , xpos: 30
+            , ypos: 30
+            , radius:10
+            , increasePosition: function(byHowMuchX, byHowMuchY) {
+                //this keyword denotes the var that is a part of theBall object 
+                // console.log(xpos) shows as 10
+                //console.log(this.xpos) shows as 30 in this case 
+            this.xpos = this.xpos + byHowMuchX;
+            this.ypos = this.ypos + byHowMuchY;
+            console.log("Ball now has these coordinates" +this.xpos + this.ypos)
+            //show user the changes
+        }
+        , resize: function(r) {
+            //changing the radius to create a bigger ball
+            this.radius = this.radius + r;
+        }
+        , draw: function() {
+            //begin the path we may move the starting positon before this
+            ctx.beginPath();
+            //draw the ball with the balls variables
+            ctx.arc(this.xpos, this.ypos, this.radius, 0, 2 * Math.PI);
+            ctx.closePath();
+            ctx.fill();
+            //actually fill the canvas with our ball and log the co ords
+            console.log("Drawing ball at " +this.xpos+this.ypos);
+        }
+        };
+        theBall.draw();
+        //move next ball position
+        theBall.increasePosition(100,100);
+        //time used to delay the folling ball could also use for loop
+        window.setTimeout(function() { theBall.draw()} ,2000);
+        //make the ball even bigger
+        window.setTimeout(function() {  theBall.increasePosition(100,100);theBall.resize(30) } ,4000);
+        window.setTimeout(function() { theBall.draw()} ,6000);
+        
+        </script>
+    </body>
+    </html>
