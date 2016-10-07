@@ -1,0 +1,94 @@
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Canvas</title>
+        <!--Ryan Gordon - G00326349 - Graphics programming -->
+
+        <style type="text/css">
+        body {
+         background-color: white;
+        }
+        </style>
+    </head>
+
+    <body>
+
+        <canvas id="canvas-for-ball" style="border:1px solid #000000;">></canvas>
+
+        
+        <script type="text/javascript">
+        // Gets a handle to the element with id canvasOne.
+        var canvas = document.getElementById("canvas-for-ball");
+        // Get a 2D context for the canvas.
+        var ctx = canvas.getContext("2d");
+        //Define starting positions
+        //Test these definitions in the broswer console
+        var W = 350,
+		H = 450;
+
+        // Applying these to the canvas element
+        canvas.height = H; canvas.width = W;
+        
+        var ball = {},
+		gravity = 0.2,
+		bounciness = .9;
+
+        ball = {
+        x: 175,
+        y: 50,
+        
+        radius: 15,
+        color: "red",
+        
+        // Velocity components
+        vx: 1,
+        vy: 1,
+        
+        draw: function() {
+            // begin drawing the path 
+            // fill arc circle with fill color and close again so a further drawing does not cause issues
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.radius, 0, Math.PI*2);
+            ctx.fillStyle = this.color;
+            ctx.fill();
+            ctx.closePath();
+        }
+    };
+
+    //a function wrapper for the clear function 
+    function clearCanvas() {
+        ctx.clearRect(0, 0, W, H);
+    }
+
+   //updates the ball animation so that the velocity and grav can be applied
+    function update() {
+        //Clear canvas for new frame
+        clearCanvas();
+        //draw the ball image
+        ball.draw();
+        
+        // Add velocity to y axis 
+        ball.y += ball.vy;
+        //need to add x axis velocity
+
+        ball.vy += gravity;
+        //could add gravity to x to give distorted grav
+
+        //Perfect! Now, lets make it rebound when it touches the floor
+        if(ball.y + ball.radius > H) {
+            // First, reposition the ball on top of the floor and then bounce it!
+            ball.y = H - ball.radius;
+            ball.vy *= -bounciness;
+            // The bounciness variable denotes how force of bounce.
+            // If bounce will be great in some cases may increase in bounce height.
+            // If 0, then it will be inelastic.
+        }
+    }
+
+    // Set interval allows us to call the event repeadetly based on time rather than indices
+    // in setInterval, 1000/x depicts fps
+    setInterval(update, 1000/60);
+        </script>
+    </body>
+    </html>
