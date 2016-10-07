@@ -71,6 +71,7 @@
         // Add velocity to y axis 
         ball.y += ball.vy;
         //need to add x axis velocity
+        ball.x += ball.vx;
 
         ball.vy += gravity;
         //could add gravity to x to give distorted grav
@@ -80,6 +81,7 @@
             // First, reposition the ball on top of the floor and then bounce it!
             ball.y = H - ball.radius;
             ball.vy *= -bounciness;
+            
             // The bounciness variable denotes how force of bounce.
             // If bounce will be great in some cases may increase in bounce height.
             // If 0, then it will be inelastic.
