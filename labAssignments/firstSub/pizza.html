@@ -15,18 +15,25 @@
     <body>
 
         <canvas id="canvas-for-ball" width="700" height="500" style="border:1px solid #000000;">></canvas>
+
+
+        <!-- Start of the JS -->
         <script type="text/javascript">
         // Gets a handle to the element with id canvasOne.
         var canvas = document.getElementById("canvas-for-ball");
         // Get a 2D context for the canvas.
         var ctx = canvas.getContext("2d");
+        /*
         //Define starting positions
         //Test these definitions in the broswer console
         var xpos = 100;
         var ypos = 100;
         var radius = 100;
-        var startPos;
-        var pizzaSlices = 5;
+        
+        code from earlier exercises 1-4
+        */
+
+        //used to clear the timeout 
         var pizzaDraw;
         function toRadians(deg) {
         return deg * Math.PI / 180
@@ -88,8 +95,6 @@
             this.slices++;
         }
         , makePizza: function() {
-            
-            
             //Draw a sector that is 1/8 of a full circle
             this.pizzaDraw =setInterval(function(){ thePizza.draw() }, 3000);
             //instead of using a set timeout to stop the setInterval
@@ -103,7 +108,7 @@
             ctx.fill();
         }
         };
-
+        //Starts the creation of the pizza drawing slices every 3s onto a crust
         thePizza.makePizza();
         console.log("This has been triggered");
 
