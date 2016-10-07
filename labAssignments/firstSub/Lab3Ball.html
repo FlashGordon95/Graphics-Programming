@@ -75,6 +75,7 @@
 
         ball.vy += gravity;
         //could add gravity to x to give distorted grav
+       
 
         //Perfect! Now, lets make it rebound when it touches the floor
         if(ball.y + ball.radius > H) {
@@ -89,6 +90,15 @@
         if(ball.x + ball.radius > W) {
             // First, reposition the ball on top of the floor and then bounce it!
             ball.x = W - ball.radius;
+            ball.vx *= -bounciness;
+            
+            // The bounciness variable denotes how force of bounce.
+            // If bounce will be great in some cases may increase in bounce height.
+            // If 0, then it will be inelastic.
+        }
+        else if(ball.x - ball.radius <0) {
+            // First, reposition the ball on top of the floor and then bounce it!
+            ball.x = 0 + ball.radius;
             ball.vx *= -bounciness;
             
             // The bounciness variable denotes how force of bounce.
