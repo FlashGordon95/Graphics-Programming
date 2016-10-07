@@ -23,7 +23,6 @@
         // Get a 2D context for the canvas.
         var ctx = canvas.getContext("2d");
         //Define starting positions
-        //Test these definitions in the broswer console
         var W = 350,
 		H = 450;
 
@@ -32,7 +31,7 @@
         
         var ball = {},
 		gravity = 0.2,
-		bounciness = .9;
+		bounciness = 1;
 
         ball = {
         x: 175,
@@ -82,6 +81,15 @@
             // First, reposition the ball on top of the floor and then bounce it!
             ball.y = H - ball.radius;
             ball.vy *= -bounciness;
+            
+            // The bounciness variable denotes how force of bounce.
+            // If bounce will be great in some cases may increase in bounce height.
+            // If 0, then it will be inelastic.
+        }
+        else if(ball.y - ball.radius < 0) {
+            // First, reposition the ball on top of the floor and then bounce it!
+            ball.y = 0 + ball.radius;
+            ball.vy *= +bounciness;
             
             // The bounciness variable denotes how force of bounce.
             // If bounce will be great in some cases may increase in bounce height.
