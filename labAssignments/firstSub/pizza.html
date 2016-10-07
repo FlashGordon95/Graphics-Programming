@@ -26,10 +26,11 @@
         var ypos = 100;
         var radius = 100;
         var startPos;
-        var pizzaSlices = 7;
+        var pizzaSlices = 5;
+        var pizzaDraw;
         function toRadians(deg) {
-    return deg * Math.PI / 180
-}
+        return deg * Math.PI / 180
+        }
 
         function increasePosition(byHowMuchX, byHowMuchY){
             xpos = xpos + byHowMuchX;
@@ -43,6 +44,8 @@
             , radius:100
             , startPos: 0
             , endPos: 45
+            , slices: 0
+            , pizzaDraw
             , increasePosition: function(byHowMuchX, byHowMuchY) {
             this.xpos = this.xpos + byHowMuchX;
             this.ypos = this.ypos + byHowMuchY;
@@ -53,6 +56,12 @@
             this.radius = this.radius + r;
         }
         , draw: function() {
+            console.log("\n"+this.slices);
+            //6 because slices is 0based 0-6
+            if(this.slices == 6){
+            //Clear the interval when we have enough slices, we are not gluttons!
+                clearInterval(this.pizzaDraw);
+            }
             //Draw a sector that is 1/8 of a full circle
             ctx.beginPath();
             ctx.moveTo(this.xpos, this.ypos);
@@ -70,26 +79,34 @@
             ctx.fillStyle = 'red';
             ctx.fill();
             ctx.closePath();
-            Log this to user
+            //Log this to user
             console.log("Drawing ball at " +this.xpos+this.ypos);
             console.log("Incrementing the pos"+this.startPos);
             this.startPos= this.startPos + 45;
             this.endPos= this.endPos + 45;
             console.log("pos"+this.startPos);
+            this.slices++;
+        }
+        , makePizza: function() {
+            
+            
+            //Draw a sector that is 1/8 of a full circle
+            this.pizzaDraw =setInterval(function(){ thePizza.draw() }, 3000);
+            //instead of using a set timeout to stop the setInterval
+            //i have opted to have a object literal slices
+            //when slices is greater than desired slices no more will be drawn
+            
+            //Draw crust. This happens before any slices
+            ctx.beginPath();
+            ctx.arc(thePizza.xpos, thePizza.ypos, (thePizza.radius+5),0,2 * Math.PI);
+            ctx.fillStyle = '#8B4513';
+            ctx.fill();
         }
         };
 
-         var pizzaDraw =setInterval(function(){ thePizza.draw() }, 3000);
-         setTimeout(function() { clearInterval(pizzaDraw) }, 21000);
+        thePizza.makePizza();
+        console.log("This has been triggered");
 
-         //Draw the crust 
-         ctx.beginPath();
-      ctx.arc(thePizza.xpos, thePizza.ypos, (thePizza.radius+5),0,2 * Math.PI);
-      ctx.fillStyle = '#8B4513';
-      ctx.fill();
-
-        
-        
         </script>
     </body>
     </html>
