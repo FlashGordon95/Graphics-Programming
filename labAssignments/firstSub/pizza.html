@@ -80,12 +80,6 @@
             ctx.stroke();
             ctx.closePath();
             
-            //This draws a pepperoni
-            ctx.beginPath();
-            ctx.arc(this.xpos+30, this.ypos, this.radius/10, toRadians(this.startPos+45),1*Math.PI);
-            ctx.fillStyle = 'red';
-            ctx.fill();
-            ctx.closePath();
             //Log this to user
             console.log("Drawing ball at " +this.xpos+this.ypos);
             console.log("Incrementing the pos"+this.startPos);

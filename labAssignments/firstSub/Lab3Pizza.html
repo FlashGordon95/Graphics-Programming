@@ -82,6 +82,15 @@
             ctx.strokeStyle = 'black';
             ctx.stroke();
             ctx.closePath();
+
+
+            //This draws a pepperoni
+            ctx.beginPath();
+            ctx.moveTo((this.xpos+30), this.ypos);
+            ctx.arc((this.xpos+30), this.ypos, this.radius/10, 0,1*Math.PI);
+            ctx.fillStyle = 'red';
+            ctx.fill();
+            ctx.closePath();
             
         }
     };
