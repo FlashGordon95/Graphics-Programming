@@ -30,20 +30,27 @@
         var ypos = 100;
         var radius = 100;
         
-        code from earlier exercises 1-4
-        */
-
-        //used to clear the timeout 
-        var pizzaDraw;
-        function toRadians(deg) {
-        return deg * Math.PI / 180
-        }
-
         function increasePosition(byHowMuchX, byHowMuchY){
             xpos = xpos + byHowMuchX;
             ypos = ypos + byHowMuchY;
 
         }
+        
+        
+        code from earlier exercises 1-4
+        */
+
+        //used to clear the timeout 
+        var pizzaDraw;
+        //a function which turns degrees into radians
+        //radians are more useful when drawing with canvas
+        //however i am used to working with degrees 
+        
+        function toRadians(deg) {
+        return deg * Math.PI / 180
+        }
+
+        
         var thePizza= {
             name: "PizzaMcPizzaFace"
             , xpos: canvas.width/2
@@ -56,7 +63,6 @@
             , increasePosition: function(byHowMuchX, byHowMuchY) {
             this.xpos = this.xpos + byHowMuchX;
             this.ypos = this.ypos + byHowMuchY;
-            console.log("Ball now has these coordinates" +this.xpos + this.ypos)
         }
         , resize: function(r) {
             this.radius = this.radius + r;
@@ -70,6 +76,7 @@
                 clearInterval(this.pizzaDraw);
             }
             //Draw a sector that is 1/8 of a full circle
+            //stroke and lineto commands is used to show the division between the slices
             ctx.beginPath();
             ctx.moveTo(this.xpos, this.ypos);
             ctx.arc(this.xpos, this.ypos, this.radius,toRadians(this.startPos),toRadians(this.endPos));
@@ -104,7 +111,6 @@
         };
         //Starts the creation of the pizza drawing slices every 3s onto a crust
         thePizza.makePizza();
-        console.log("This has been triggered");
 
         </script>
     </body>

@@ -14,12 +14,12 @@
 
     <body>
 
-        <canvas id="canvas-for-ball" style="border:1px solid #000000;">></canvas>
+        <canvas id="canvas-for-thePizza" style="border:1px solid #000000;">></canvas>
 
         
         <script type="text/javascript">
         // Gets a handle to the element with id canvasOne.
-        var canvas = document.getElementById("canvas-for-ball");
+        var canvas = document.getElementById("canvas-for-thePizza");
         // Get a 2D context for the canvas.
         var ctx = canvas.getContext("2d");
         //Define starting positions
@@ -34,16 +34,15 @@
         canvas.height = H; canvas.width = W;
         var pizzaDraw;
         
-        var ball = {},
+        var thePizza = {},
 		gravity = 0.2,
 		bounciness = 1;
 
-        ball = {
+        thePizza = {
         xpos: canvas.width/2,
         ypos: canvas.height/2,
         vx: 1,
         vy: 1,
-        
         radius:100, 
         startPos: 0,
         endPos: 45, 
@@ -52,10 +51,9 @@
         increasePosition: function(byHowMuchX, byHowMuchY) {
             this.xpos = this.xpos + byHowMuchX;
             this.ypos = this.ypos + byHowMuchY;
-            console.log("Ball now has these coordinates" +this.xpos + this.ypos)
+            console.log("thePizza now has these coordinates" +this.xpos + this.ypos)
         }
         , resize: function(r) {
-            this.radius = this.radius + r;
             this.radius = this.radius + r;
         }
         , draw: function() {
@@ -65,17 +63,18 @@
             //Clear the interval when we have enough slices, we are not gluttons!
                 clearInterval(this.pizzaDraw);
             }
-
+            //This draws a crust
             ctx.beginPath();
             ctx.moveTo(this.xpos, this.ypos);
             ctx.arc(this.xpos, this.ypos, (this.radius+5),toRadians(this.startPos),toRadians(this.endPos));
             ctx.fillStyle = '#8B4513';
             ctx.fill();
             ctx.closePath();
-            //Draw a sector that is 1/8 of a full circle
+
+            //This draws a sector that is 1/8 of a full circle aka a pizza slice in a 8 slice pizza
             ctx.beginPath();
             ctx.moveTo(this.xpos, this.ypos);
-           ctx.arc(this.xpos, this.ypos, this.radius,toRadians(this.startPos),toRadians(this.endPos));
+            ctx.arc(this.xpos, this.ypos, this.radius,toRadians(this.startPos),toRadians(this.endPos));
             ctx.fillStyle = '#FEFFA2';
             ctx.lineTo(this.xpos,this.ypos);
             ctx.fill();
@@ -83,71 +82,69 @@
             ctx.stroke();
             ctx.closePath();
 
-
             //This draws a pepperoni
             ctx.beginPath();
             ctx.moveTo((this.xpos+30), this.ypos);
             ctx.arc((this.xpos+30), this.ypos, this.radius/10, 0,1*Math.PI);
             ctx.fillStyle = 'red';
             ctx.fill();
-            ctx.closePath();
-            
-        }
+            ctx.closePath(); 
+        }//draw() begins the path, creates an arc with the object member variables and fills it
     };
 
-    //a function wrapper for the clear function 
+    //wrapper for clear function
     function clearCanvas() {
         ctx.clearRect(0, 0, W, H);
     }
 
-   //updates the ball animation so that the velocity and grav can be applied
+   //updates the thePizza animation so that the velocity and grav can be applied
     function update() {
         //Clear canvas for new frame
         clearCanvas();
-        //draw the ball image
-        ball.draw();
+        //draw the thePizza image
+        thePizza.draw();
         
         // Add velocity to y axis 
-        ball.ypos += ball.vy;
+        thePizza.ypos += thePizza.vy;
         //need to add x axis velocity
-        ball.xpos += ball.vx;
+        thePizza.xpos += thePizza.vx;
 
-        ball.vy += gravity;
+        thePizza.vy += gravity;
         //could add gravity to x to give distorted grav
        
 
         //Perfect! Now, lets make it rebound when it touches the floor
-        if(ball.ypos + ball.radius > H) {
-            // First, reposition the ball on top of the floor and then bounce it!
-            ball.ypos = H - ball.radius;
-            ball.vy *= -bounciness;
+        if(thePizza.ypos + thePizza.radius > H) {
+            // First, reposition the thePizza on top of the floor and then bounce it!
+            thePizza.ypos = H - thePizza.radius;
+            thePizza.vy *= -bounciness;
             
             // The bounciness variable denotes how force of bounce.
             // If bounce will be great in some cases may increase in bounce height.
             // If 0, then it will be inelastic.
         }
-        else if(ball.ypos - (ball.radius) < 0) {
-            // First, reposition the ball on top of the floor and then bounce it!
-            ball.ypos = 0 + ball.radius;
-            ball.vy *= +bounciness;
+        else if(thePizza.ypos - (thePizza.radius) < 0) {
+            // First, reposition the thePizza on top of the floor and then bounce it!
+            thePizza.ypos = 0 + thePizza.radius;
+            thePizza.vy *= +bounciness;
             
             // The bounciness variable denotes how force of bounce.
             // If bounce will be great in some cases may increase in bounce height.
             // If 0, then it will be inelastic.
         }
-        if(ball.xpos + ball.radius > W) {
-            // First, reposition the ball on top of the floor and then bounce it!
-            ball.xpos = W - ball.radius;
-            ball.vx *= -bounciness;
+        if(thePizza.xpos + thePizza.radius > W) {
+            // First, reposition the thePizza on top of the floor and then bounce it!
+            thePizza.xpos = W - thePizza.radius;
+            thePizza.vx *= -bounciness;
             
             // The bounciness variable denotes how force of bounce.
             // If bounce will be great in some cases may increase in bounce height.
             // If 0, then it will be inelastic.
         }
-        else if(ball.xpos - ball.radius <0) {
-            // First, reposition the ball on top of the floor and then bounce it!
-            ball.xpos = 0 + ball.radius;
-            ball.vx *= -bounciness;
+        else if(thePizza.xpos - thePizza.radius <0) {
+            // First, reposition the thePizza on top of the floor and then bounce it!
+            thePizza.xpos = 0 + thePizza.radius;
+            thePizza.vx *= -bounciness;
             
             // The bounciness variable denotes how force of bounce.
             // If bounce will be great in some cases may increase in bounce height.
@@ -156,8 +153,7 @@
     }
 
     // Set interval allows us to call the event repeadetly based on time rather than indices
-    // in setInterval, 1000/x depicts fps
-  
+    // in setInterval, 1000/x gives a frame 
     setInterval(update, 1000/60);
         </script>
     </body>

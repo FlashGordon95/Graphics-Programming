@@ -22,6 +22,7 @@
         var ctx = canvas.getContext("2d");
         //Define starting positions
         //Test these definitions in the broswer console
+        //I have left these here on purpose to show proper use of the 'this' keyword
         var xpos = 10;
         var ypos = 10;
         var radius = 2;
@@ -32,33 +33,39 @@
 
         }
         var theBall = {
+            //Please dont deduct marks for him, his name be praised
             name: "Harambe"
             , xpos: 30
             , ypos: 30
             , radius:3
             , increasePosition: function(byHowMuchX, byHowMuchY) {
+            //'this'' denotes the xpos var within the object theBall
             this.xpos = this.xpos + byHowMuchX;
             this.ypos = this.ypos + byHowMuchY;
             console.log("Ball now has these coordinates" +this.xpos + this.ypos)
-        }
-        , resize: function(r) {
-            this.radius = this.radius + r;
-            this.radius = this.radius + r;
-        }
-        , draw: function() {
-            ctx.beginPath();
-            
-            ctx.arc(this.xpos, this.ypos, this.radius, 0, 2 * Math.PI);
-            ctx.closePath();
-            ctx.fill();
-            console.log("Drawing ball at " +this.xpos+this.ypos);
-        }
+            }//increase position increments the X and Y pos
+            , resize: function(r) {
+                this.radius = this.radius + r;
+                this.radius = this.radius + r;
+            }//resize changes the radius of the ball
+            , draw: function() {
+                ctx.beginPath();
+                ctx.arc(this.xpos, this.ypos, this.radius, 0, 2 * Math.PI);
+                ctx.closePath();
+                ctx.fill();
+                console.log("Drawing ball at " +this.xpos+this.ypos);
+            }//draw() begins the path, creates an arc with the object member variables and fills it
         };
+        //Draw the initial ball 
         theBall.draw();
+        //Move posotion of xpos and ypos for next drawing
         theBall.increasePosition(100,100);
+        //Runs the draw function after 2s with the new positon
         window.setTimeout(function() { theBall.draw()} ,2000);
         window.setTimeout(function() {  theBall.increasePosition(100,100)} ,2000);
+        //Position is changed again 
         window.setTimeout(function() {theBall.resize(3); theBall.draw()} ,6000);
+
         
         </script>
     </body>
