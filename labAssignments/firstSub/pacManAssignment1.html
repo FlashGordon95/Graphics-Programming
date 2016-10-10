@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html>
     <head>
@@ -14,9 +13,8 @@
 
     <body>
 
-        <canvas id="canvas-for-ball" width="700" height="500" style="border:1px solid #000000;">></canvas>
-        <button onclick="drawCirc()">Press to generate circle</button>
-        <script type="text/javascript">
+            <canvas id="canvas-for-ball" width="700" height="500" style="border:1px solid #000000;">></canvas>
+            <script type="text/javascript">
         // Gets a handle to the element with id canvasOne.
         var canvas = document.getElementById("canvas-for-ball");
         // Get a 2D context for the canvas.
@@ -31,22 +29,22 @@
          // The Horizontal axis ctx.
         var x = 50;
 
-        // A function to repeat every time the animation loops.
+        
         function drawPacMan() {
-            //Drawing the ball alone does not clear the previous position of the ball at any point
-            //to do this we would either need to clear the pixel area where the ball is taking up
-            //or clear the entire canvas and redraw. 
+            //Similar to the ball we need to draw arcs to get the pacman
+            //The best way to do this in my opinion is 2 partial arcs followed by 1 arc for the eye
             ctx.beginPath();
             ctx.arc(100, 100, 50, 0.25 * Math.PI, 1.25 * Math.PI, false);
             //We draw a partial arc, this will encompass the whole pacman
             ctx.fillStyle = "rgb(255, 255, 0)";
             ctx.fill();
+
             ctx.beginPath();
             ctx.arc(100, 100, 50, 0.75 * Math.PI, 1.75 * Math.PI, false);
-            //We draw another partial arc
             ctx.fill();
+
+            //An arc used to give pacman an eye
             ctx.beginPath();
-            //A final arc to fill in Pacmans , white mouth
             ctx.arc(100, 75, 10, 0, 2 * Math.PI, false);
             ctx.fillStyle = "rgb(0, 0, 0)";
             ctx.fill();
@@ -54,8 +52,6 @@
             window.requestAnimationFrame(drawPacMan);
         }
         
-        
-        // Get the animation going.
         drawPacMan();
         </script>
     </body>

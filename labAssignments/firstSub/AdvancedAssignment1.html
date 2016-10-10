@@ -14,7 +14,6 @@
     <body>
 
         <canvas id="canvas-for-ball" width="700" height="500" style="border:1px solid #000000;">></canvas>
-        <button onclick="drawCirc()">Press to generate circle</button>
         <script type="text/javascript">
         // Gets a handle to the element with id canvasOne.
         var canvas = document.getElementById("canvas-for-ball");
@@ -26,27 +25,26 @@
         
         
         // The vertical axis ctx.
-        var y = 40;
-        var x = 50;
+        var y = canvas.width/2;
+        var x = canvas.height/2;
         var reDrawx = 50;
         function reDrawCirc(){
-            
+            //This draws a circle again reDraw x is used to show the diff between x and redrawx
+            //Could also simply do x += x;
             reDrawx += x;
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             ctx.beginPath();
             ctx.fillStyle = "#3370d4";
-            ctx.arc(, y, 25, 0, 2 * Math.PI);
+            ctx.arc(reDrawx, y, 25, 0, 2 * Math.PI);
             //Add 50px to the x coordinate as per requirments
             ctx.fill();
         }
         function drawCirc(){
-            
-                
-            
             ctx.beginPath();
             ctx.fillStyle = "#3370d4";
             ctx.arc(x, y, 25, 0, 2 * Math.PI);
             ctx.fill();
+            console.log('Did the drawing');
             //After 3s or 3000ms timeout triggers and ball is moved 50px
             window.setTimeout(function(){reDrawCirc()},3000);
         }
