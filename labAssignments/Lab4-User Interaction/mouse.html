@@ -28,14 +28,16 @@
       var ctx = canvas.getContext("2d");
       // Make the fill style red.
       ctx.fillStyle = "rgb(255, 0, 0)";
-
+      console.log("This is offset"+ canvas.offsetLeft);
+      console.log("This is offset"+ canvas.offsetTop);
       
       
       canvas.addEventListener("click", function(event) { 
         ctx.beginPath();
-        ctx.arc(event.clientX, event.clientY, 6, 0, 2 * Math.PI);
+        ctx.arc((event.clientX-canvas.offsetLeft), (event.clientY-canvas.offsetTop), 6, 0, 2 * Math.PI);
         ctx.fill();
-        console.log(event.clientX.offsetTop);
+        console.log(event.clientX-canvas.offsetLeft);
+        console.log(event.clientY-canvas.offsetTop);
         noClicks += 1;
         console.log(noClicks);
         
