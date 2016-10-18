@@ -46,6 +46,10 @@
         
 		var gravity = 0.2,
 		bounciness = .9;
+        //a function wrapper for the clear function 
+        function clearCanvas() {
+            ctx.clearRect(0, 0, W, H);
+        }
 
         function Ball(x,y,r,xVel,yVel, mass) {
         this.x = x;
@@ -66,7 +70,7 @@
         this.resize = function(r) {
             // begin drawing the path 
             // fill arc circle with fill color and close again so a further drawing does not cause issues
-           this.r = r
+           this.r = r;
         }
         this.move = function(xpos,ypos) {
             // begin drawing the path 
@@ -83,92 +87,84 @@
         if (this.position.x + this.r >= canvas.width) {
         this.velocity.x = -this.velocity.x; }
         }
-
-        
-
-        };//end the object
-
-        function update(){
+        this.update = function(){
             
         //Clear canvas for new frame
-        clearCanvas();
+        
         //draw the ball image
-        b1.draw();
+        this.draw();
         
         // Add velocity to y axis 
-        b1.y += b1.yVel;
+        this.y += this.yVel;
         //need to add x axis velocity
-        b1.x += b1.xVel;
+        this.x += this.xVel;
 
         //b1.yVel += gravity;
         //could add gravity to x to give distorted grav
        
 
         //Perfect! Now, lets make it rebound when it touches the floor
-        if(b1.y + b1.r > H) {
+        if(this.y + this.r > H) {
             // First, reposition the ball on top of the floor and then bounce it!
-            b1.y = H - b1.r;
-           b1.yVel *= -bounciness;
+            this.y = H - this.r;
+           this.yVel *= -bounciness;
             
             // The bounciness variable denotes how force of bounce.
             // If bounce will be great in some cases may increase in bounce height.
             // If 0, then it will be inelastic.
         }
-        else if(b1.y - b1.r < 0) {
+        else if(this.y - this.r < 0) {
             // First, reposition the ball on top of the floor and then bounce it!
-            b1.y = 0 + b1.r;
-            b1.yVel *= -bounciness;
+            this.y = 0 + this.r;
+            this.yVel *= -bounciness;
             
             // The bounciness variable denotes how force of bounce.
             // If bounce will be great in some cases may increase in bounce height.
             // If 0, then it will be inelastic.
         }
-        if(b1.x + b1.r > W) {
+        if(this.x + this.r > W) {
             // First, reposition the ball on top of the floor and then bounce it!
-            b1.x = W - b1.r;
-            b1.xVel *= -bounciness;
+            this.x = W - this.r;
+            this.xVel *= -bounciness;
             
             // The bounciness variable denotes how force of bounce.
             // If bounce will be great in some cases may increase in bounce height.
             // If 0, then it will be inelastic.
         }
-        else if(b1.x - b1.r <0) {
+        else if(this.x - this.r <0) {
             // First, reposition the ball on top of the floor and then bounce it!
-            b1.x = 0 + b1.r;
-           b1.xVel *= -bounciness;
+            this.x = 0 + this.r;
+           this.xVel *= -bounciness;
             
             // The bounciness variable denotes how force of bounce.
             // If bounce will be great in some cases may increase in bounce height.
             // If 0, then it will be inelastic.
-        }
-        }
+        }//end if
+        }// end update function
+        
+        }//end the object
     var b1 = new Ball(100,100,30,3,6,10);
     var b2 = new Ball(200,150,20,2,4,5);
+    //var b3 = new Ball(400,450,40,7,8,10);
+    //var b4 = new Ball(50,50,10,1,3,6);
     
     function step() {
+    clearCanvas();
     b1.draw();
-    update();
-   // b1.draw();
 
-    b2.draw();
+    b1.update();
 
-    console.log("Triggered");
-   
+    
+    b2.update();
+    b3.update();
+    b4.update();   
     
     requestAnimationFrame(step);
     }
     window.requestAnimationFrame(step);
     
-    //a function wrapper for the clear function 
-    function clearCanvas() {
-        ctx.clearRect(0, 0, W, H);
-    }
-   //updates the ball animation so that the velocity and grav can be applied
     
   
-    // Set interval allows us to call the event repeadetly based on time rather than indices
-    // in setInterval, 1000/x depicts fps
-    //var updateInterval =  setInterval(b1.update, 1000/60);
 
 
 
