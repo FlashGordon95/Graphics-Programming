@@ -47,31 +47,37 @@
 		var gravity = 0.2,
 		bounciness = .9;
 
-        var ball = {
-        x: 175,
-        y: 50,
+        function Ball(x,y,r,xVel,yVel, mass) {
+        this.x = x;
+        this.y = y;
+        this.r = r;
+        this.xVel = xVel;
+        this.yVel = yVel;
+        this.mass = mass;
+        var color;
         
-        radius: 15,
-        color: "red",
-        
-        // Velocity components
-        vx: 0,
-        vy: 0,
-        
-        draw: function() {
+        this.draw: function() {
             // begin drawing the path 
             // fill arc circle with fill color and close again so a further drawing does not cause issues
             ctx.beginPath();
-            ctx.arc(this.x, this.y, this.radius, 0, Math.PI*2);
-            ctx.fillStyle = this.color;
-            ctx.fill();
-            ctx.closePath();
-        },
-        updatePositon: function(x, y) {
-            this.x = x;
-            this.y = y;
-
-
+            ctx.arc(this.x, this.y, this.radius, 0, Math.PI*2, false);
+            ctxstroke();
+        }
+        this.reszie: function(radius) {
+            // begin drawing the path 
+            // fill arc circle with fill color and close again so a further drawing does not cause issues
+           this.r = radius
+        }
+        this.move: function(xpos,ypos) {
+            // begin drawing the path 
+            // fill arc circle with fill color and close again so a further drawing does not cause issues
+           this.x += xpos;
+           this.y += ypos;
+        }
+        this.setColor: function(color) {
+            // begin drawing the path 
+            // fill arc circle with fill color and close again so a further drawing does not cause issues
+           this.color = color;
         }
     };
 
