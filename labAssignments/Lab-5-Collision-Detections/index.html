@@ -56,94 +56,121 @@
         this.mass = mass;
         var color;
         
-        this.draw: function() {
+        this.draw =  function() {
             // begin drawing the path 
             // fill arc circle with fill color and close again so a further drawing does not cause issues
             ctx.beginPath();
-            ctx.arc(this.x, this.y, this.radius, 0, Math.PI*2, false);
-            ctxstroke();
+            ctx.arc(this.x, this.y, this.r, 0, Math.PI*2, false);
+            ctx.stroke();
         }
-        this.reszie: function(radius) {
+        this.resize = function(r) {
             // begin drawing the path 
             // fill arc circle with fill color and close again so a further drawing does not cause issues
-           this.r = radius
+           this.r = r
         }
-        this.move: function(xpos,ypos) {
+        this.move = function(xpos,ypos) {
             // begin drawing the path 
             // fill arc circle with fill color and close again so a further drawing does not cause issues
            this.x += xpos;
            this.y += ypos;
         }
-        this.setColor: function(color) {
+        this.setColor = function(color) {
             // begin drawing the path 
             // fill arc circle with fill color and close again so a further drawing does not cause issues
            this.color = color;
         }
-    };
+       this.move = function() {
+        if (this.position.x + this.r >= canvas.width) {
+        this.velocity.x = -this.velocity.x; }
+        }
 
-    //a function wrapper for the clear function 
-    function clearCanvas() {
-        ctx.clearRect(0, 0, W, H);
-    }
+        
 
-   //updates the ball animation so that the velocity and grav can be applied
-    function update() {
+        };//end the object
+
+        function update(){
+            
         //Clear canvas for new frame
         clearCanvas();
         //draw the ball image
-        ball.draw();
+        b1.draw();
         
         // Add velocity to y axis 
-        ball.y += ball.vy;
+        b1.y += b1.yVel;
         //need to add x axis velocity
-        ball.x += ball.vx;
+        b1.x += b1.xVel;
 
-        ball.vy += gravity;
+        //b1.yVel += gravity;
         //could add gravity to x to give distorted grav
        
 
         //Perfect! Now, lets make it rebound when it touches the floor
-        if(ball.y + ball.radius > H) {
+        if(b1.y + b1.r > H) {
             // First, reposition the ball on top of the floor and then bounce it!
-            ball.y = H - ball.radius;
-           ball.vy *= -bounciness;
+            b1.y = H - b1.r;
+           b1.yVel *= -bounciness;
             
             // The bounciness variable denotes how force of bounce.
             // If bounce will be great in some cases may increase in bounce height.
             // If 0, then it will be inelastic.
         }
-        else if(ball.y - ball.radius < 0) {
+        else if(b1.y - b1.r < 0) {
             // First, reposition the ball on top of the floor and then bounce it!
-            ball.y = 0 + ball.radius;
-            //ball.vy *= -bounciness;
+            b1.y = 0 + b1.r;
+            b1.yVel *= -bounciness;
             
             // The bounciness variable denotes how force of bounce.
             // If bounce will be great in some cases may increase in bounce height.
             // If 0, then it will be inelastic.
         }
-        if(ball.x + ball.radius > W) {
+        if(b1.x + b1.r > W) {
             // First, reposition the ball on top of the floor and then bounce it!
-            ball.x = W - ball.radius;
-            ball.vx *= -bounciness;
+            b1.x = W - b1.r;
+            b1.xVel *= -bounciness;
             
             // The bounciness variable denotes how force of bounce.
             // If bounce will be great in some cases may increase in bounce height.
             // If 0, then it will be inelastic.
         }
-        else if(ball.x - ball.radius <0) {
+        else if(b1.x - b1.r <0) {
             // First, reposition the ball on top of the floor and then bounce it!
-            ball.x = 0 + ball.radius;
-           ball.vx *= -bounciness;
+            b1.x = 0 + b1.r;
+           b1.xVel *= -bounciness;
             
             // The bounciness variable denotes how force of bounce.
             // If bounce will be great in some cases may increase in bounce height.
             // If 0, then it will be inelastic.
         }
-    }
+        }
+    var b1 = new Ball(100,100,30,3,6,10);
+    var b2 = new Ball(200,150,20,2,4,5);
+    
+    function step() {
+    b1.draw();
+    update();
+   // b1.draw();
 
+    b2.draw();
+
+    console.log("Triggered");
+   
+    
+    requestAnimationFrame(step);
+    }
+    window.requestAnimationFrame(step);
+    
+    //a function wrapper for the clear function 
+    function clearCanvas() {
+        ctx.clearRect(0, 0, W, H);
+    }
+   //updates the ball animation so that the velocity and grav can be applied
+    
+  
     // Set interval allows us to call the event repeadetly based on time rather than indices
     // in setInterval, 1000/x depicts fps
-    var updateInterval =  setInterval(update, 1000/60);
+    //var updateInterval =  setInterval(b1.update, 1000/60);
+
+
 
     canvas.addEventListener("click", function(event) { 
         //Clear the interval for the previous animation
@@ -153,7 +180,7 @@
         //Draw the ball in a new position
         //Position given by user mouseClick
         ctx.beginPath();
-        ctx.arc((event.clientX-canvas.offsetLeft), (event.clientY-canvas.offsetTop), ball.radius, 0, Math.PI*2);
+        ctx.arc((event.clientX-canvas.offsetLeft), (event.clientY-canvas.offsetTop), ball.r, 0, Math.PI*2);
         ctx.fill();
         //Show the new ball position to user
         console.log(event.clientX-canvas.offsetLeft);
@@ -188,7 +215,7 @@
                 clearInterval(updateInterval);
                 ball.draw();
                 
-               ball.vx = 0;
+               ball.xVel = 0;
                ball.vy = 0;
 				break;
             //User presses Up arrow key, corresponding key num is 38
@@ -209,15 +236,15 @@
 			// key code for left arrow
 			case 37:
 				console.log('left arrow key pressed!');
-                ball.vx = ball.vx - 2;
-                console.log('X velocity now '+ball.vx);
+                ball.xVel = ball.xVel - 2;
+                console.log('X velocity now '+ball.xVel);
 				break;
 
 			// key code for right arrow
 			case 39:
 				console.log('right arrow key pressed!');
-                 ball.vx += 1;
-                console.log('X velocity now '+ball.vx);
+                 ball.xVel += 1;
+                console.log('X velocity now '+ball.xVel);
 				break;
 			}
 		});
