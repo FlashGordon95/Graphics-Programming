@@ -14,6 +14,7 @@
         var H = 600;
         var W = 600;
         var steps=0;
+        var rotations=0;
 
 
         function init() {
@@ -57,26 +58,41 @@
         ctx.clearRect(0, 0, canvas.width, canvas.height); ctx.restore();
         }
       
-        ctx.translate(50,50);
         function repeatMe() {
         //Clear canvas for new frame
         clear();
        
         pac1.draw();
         ctx.translate(1,0);
-        requestAnimationFrame(repeatMe);
+        
         steps+= 1;
-        console.log(steps);
 
         //when steps reaches a interval or 400 steps
         //do a 90 degree rotation
+        if(steps % 1200 == 0&&rotations %3==0){
+          ctx.scale(1,-1);
+          console.log("Second iteration done , scaling pacman");
+        }
          if(steps % 400 ==0){
+           ctx.scale(1, 1);
            console.log("This is the positions"+pac1.x , pac1.y);
           console.log("Step count triggered, rotating now");
           ctx.translate(30,30);
           ctx.rotate(90*Math.PI/180);
+          rotations++;
         }
+        if (steps %800 == 0){
+          // flip context horizontally
+        ctx.scale(1, -1);
+        console.log("Second iteration done , scaling pacman");
+        rotations++;
         }
+        requestAnimationFrame(repeatMe);
+        }
+        
+
+        var nosteps = 0;
+        ctx.translate(50,50);
         repeatMe();
 
        
