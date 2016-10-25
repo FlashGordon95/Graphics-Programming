@@ -7,9 +7,79 @@
   </head>
   <body>
        <canvas id="transcan"></canvas>
-    <script type="text/javascript">
+     <script type="text/javascript">
     
-        var canvas = document.getElementById('transcan'); var ctx = canvas.getContext('2d');
+        var canvas = document.getElementById('transcan'); 
+        var ctx = canvas.getContext('2d');
+        var H = 600;
+        var W = 600;
+        var steps=0;
+
+
+        function init() {
+            canvas.height = H;
+            canvas.width = W;
+        } 
+        init();
+
+        function PacMan(x,y,r) {
+        this.x = x;
+        this.y = y;
+        this.r = r;
+        var color;
+        
+        this.draw =  function() {
+            // begin drawing the path 
+            // fill arc circle with fill color and close again so a further drawing does not cause issues
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.r, 0.25 * Math.PI, 1.25 * Math.PI, false);
+            ctx.fillStyle = "rgb(255, 255, 0)";
+            ctx.fill();
+            ctx.closePath();
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.r, 0.75 * Math.PI, 1.75 * Math.PI, false);
+            ctx.fill();
+
+            //draws the eye of pacman
+            ctx.beginPath();
+            ctx.arc(this.x, (this.y-20), (this.r/5), 0, 2 * Math.PI, false);
+            ctx.fillStyle = "rgb(0, 0, 0)";
+            ctx.fill();
+        }
+        }
+
+        var pac1 = new PacMan(0,0,40);
+
+        //clears the canvas using the transform function
+        function clear() {
+        ctx.save();
+        ctx.setTransform(1, 0, 0, 1, 0, 0); 
+        ctx.clearRect(0, 0, canvas.width, canvas.height); ctx.restore();
+        }
+      
+        ctx.translate(50,50);
+        function repeatMe() {
+        //Clear canvas for new frame
+        clear();
+       
+        pac1.draw();
+        ctx.translate(1,0);
+        requestAnimationFrame(repeatMe);
+        steps+= 1;
+        console.log(steps);
+
+        //when steps reaches a interval or 400 steps
+        //do a 90 degree rotation
+         if(steps % 400 ==0){
+           console.log("This is the positions"+pac1.x , pac1.y);
+          console.log("Step count triggered, rotating now");
+          ctx.translate(30,30);
+          ctx.rotate(90*Math.PI/180);
+        }
+        }
+        repeatMe();
+
+       
          </script>
   </body>
 </html>
