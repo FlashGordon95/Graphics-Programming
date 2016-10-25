@@ -6,13 +6,13 @@
     <style type="text/css"></style>
   </head>
   <body>
-       <canvas id="transcan"></canvas>
+       <canvas id="transcan" style="border:1px solid #000000;"></canvas>
      <script type="text/javascript">
     
         var canvas = document.getElementById('transcan'); 
         var ctx = canvas.getContext('2d');
-        var H = 600;
-        var W = 600;
+        var H = 700;
+        var W = 900;
         var steps=0;
         var rotations=0;
 
@@ -59,40 +59,37 @@
         }
       
         function repeatMe() {
+        
         //Clear canvas for new frame
         clear();
-       
+        //use the PacMan objects Draw function
         pac1.draw();
+        //translate the canvas forward along the x axis by 1px
+        //this gives the impression of object movement 
+        //in reality the canvas is moving 
         ctx.translate(1,0);
-        
+        //increment the steps counter
         steps+= 1;
 
-        //when steps reaches a interval or 400 steps
-        //do a 90 degree rotation
-        if(steps % 1200 == 0&&rotations %3==0){
+        //when pacman has reached the third corner to turn scale him back to his previous scale
+        //this needs to be above the rotation so that it happens beforehand
+        if(steps == 1200){
           ctx.scale(1,-1);
-          console.log("Second iteration done , scaling pacman");
+          console.log("Third corner hit , scaling pacman back to normal");
         }
-         if(steps % 400 ==0){
-           ctx.scale(1, 1);
-           console.log("This is the positions"+pac1.x , pac1.y);
+        //every 400 steps we want to turn the pacman so that the journey is continued facing the right way 
+        if(steps % 400 == 0){
+          ctx.rotate(90*Math.PI/180); //rotate the canvas 90 degrees, a conversion to radians is needed
+          //@Ryan Gordon - G00326349
           console.log("Step count triggered, rotating now");
-          ctx.translate(30,30);
-          ctx.rotate(90*Math.PI/180);
-          rotations++;
         }
-        if (steps %800 == 0){
-          // flip context horizontally
-        ctx.scale(1, -1);
-        console.log("Second iteration done , scaling pacman");
-        rotations++;
+        if (steps == 800){
+        ctx.scale(1, -1); //inverses the pacman object , after 180 turn the object would appear upside down without this
+        console.log("Second corner hit, applying inverse scale to pacman");
         }
-        requestAnimationFrame(repeatMe);
+        requestAnimationFrame(repeatMe); //repeat for animation
         }
-        
-
-        var nosteps = 0;
-        ctx.translate(50,50);
+        ctx.translate(100,100);
         repeatMe();
 
        
