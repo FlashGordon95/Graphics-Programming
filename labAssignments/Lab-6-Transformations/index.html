@@ -7,22 +7,23 @@
   </head>
   <body>
        <canvas id="transcan" style="border:1px solid #000000;"></canvas>
+
      <script type="text/javascript">
-    
         var canvas = document.getElementById('transcan'); 
+        var tempimg = document.createElement('canvas');
         var ctx = canvas.getContext('2d');
-        var H = 700;
-        var W = 900;
+        var H = 600;
+        var W = 600;
         var steps=0;
         var rotations=0;
-
-
+       
+        //initialise some values
         function init() {
             canvas.height = H;
             canvas.width = W;
         } 
         init();
-
+        //Pac Man object , contains variables and functions
         function PacMan(x,y,r) {
         this.x = x;
         this.y = y;
@@ -30,6 +31,7 @@
         var color;
         
         this.draw =  function() {
+            
             // begin drawing the path 
             // fill arc circle with fill color and close again so a further drawing does not cause issues
             ctx.beginPath();
@@ -46,20 +48,21 @@
             ctx.arc(this.x, (this.y-20), (this.r/5), 0, 2 * Math.PI, false);
             ctx.fillStyle = "rgb(0, 0, 0)";
             ctx.fill();
-        }
-        }
+         }
+        }//end PacMan object
 
         var pac1 = new PacMan(0,0,40);
-
         //clears the canvas using the transform function
         function clear() {
         ctx.save();
         ctx.setTransform(1, 0, 0, 1, 0, 0); 
-        ctx.clearRect(0, 0, canvas.width, canvas.height); ctx.restore();
+        ctx.clearRect(0, 0, canvas.width, canvas.height); 
+        ctx.rect(100,120,300,300);
+        ctx.stroke();
+        ctx.restore();
         }
       
         function repeatMe() {
-        
         //Clear canvas for new frame
         clear();
         //use the PacMan objects Draw function
@@ -67,9 +70,9 @@
         //translate the canvas forward along the x axis by 1px
         //this gives the impression of object movement 
         //in reality the canvas is moving 
-        ctx.translate(1,0);
+        ctx.translate(2,0);
         //increment the steps counter
-        steps+= 1;
+        steps+= 2;
 
         //when pacman has reached the third corner to turn scale him back to his previous scale
         //this needs to be above the rotation so that it happens beforehand
@@ -89,10 +92,9 @@
         }
         requestAnimationFrame(repeatMe); //repeat for animation
         }
-        ctx.translate(100,100);
+        ctx.translate(50,60);
         repeatMe();
-
-       
+      
          </script>
   </body>
 </html>

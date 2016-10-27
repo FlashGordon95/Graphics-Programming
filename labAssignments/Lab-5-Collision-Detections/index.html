@@ -50,22 +50,25 @@
         function clearCanvas() {
             ctx.clearRect(0, 0, W, H);
         }
-
+        //when a collision is detected we need to gather the speed and angles of the collison 
+        //also we need the angle of the rebound
         function collisonDect(){
+            //get distances
         dx = balls[0].x -balls[1].x;
         dy = balls[0].y -balls[1].y;
         collision_angle = Math.atan2(dy,dx);
 
-        //calculagte speed
+        //calculagte speed of ball 1
         magnitude_1 = Math.sqrt(balls[0].xVel*balls[0].xVel +balls[0].yVel *balls[0].yVel );
-        //calculate ball 2
+        //calculate speed of ball 2
         magnitude_2 = Math.sqrt(balls[1].xVel*balls[1].xVel +balls[1].yVel *balls[1].yVel );
-
+        //calulate new directions for the balls
         direction_1 = Math.atan(balls[0].yVel, balls[0].xVel);
         direction_2 = Math.atan(balls[1].yVel, balls[1].xVel);
 
+        //calculte the velocities for each ball 
+        //they should transfer energy somewhat dependings on each velocity
         new_xVel_1 = magnitude_1 * Math.cos(direction_1-collision_angle);
-
         new_yVel_1 = magnitude_1*Math.sin(direction_1-collision_angle);
         new_xVel_2 = magnitude_2*Math.cos(direction_2-collision_angle);
         new_yVel_2 = magnitude_2*Math.sin(direction_2-collision_angle);
@@ -80,8 +83,6 @@
         balls[0].yVel = Math.sin(collision_angle) * final_xVel_1 + Math.sin(collision_angle + Math.PI/2) * final_yVel_1;
         balls[1].xVel = Math.cos(collision_angle) * final_xVel_2 + Math.cos(collision_angle + Math.PI/2) * final_yVel_2;
         balls[1].yVel = Math.sin(collision_angle) * final_xVel_2 + Math.sin(collision_angle + Math.PI/2) * final_yVel_2;
-
-        
     }
 
         function Ball(x,y,r,xVel,yVel, mass) {
@@ -131,12 +132,8 @@
         this.y += this.yVel;
         //need to add x axis velocity
         this.x += this.xVel;
-
-        //b1.yVel += gravity;
-        //could add gravity to x to give distorted grav
        
 
-        //Perfect! Now, lets make it rebound when it touches the floor
         if(this.y + this.r > H) {
             // First, reposition the ball on top of the floor and then bounce it!
             this.y = H - this.r;
@@ -167,24 +164,22 @@
     
     
     function step() {
+    //clear the canvas
     clearCanvas();
+    //calculate the distance of the balls
     var dx = balls[0].x -balls[1].x;
     var dy = balls[0].y -balls[1].y;   
     var distance = Math.sqrt(dx * dx + dy * dy);
-   if (distance < balls[0].r + balls[1].r) {
-    // collision detected!
-    console.log("triggered");
-    collisonDect();
-}
-    balls[0].update();
-
     
+    if (distance < balls[0].r + balls[1].r) {
+        // collision detected!
+        console.log("Collison detected");
+        collisonDect();
+    }
+    balls[0].update();
     balls[1].update(); 
   
     requestAnimationFrame(step);
-
-
-
     }
     window.requestAnimationFrame(step);
     

@@ -34,10 +34,13 @@
       
       canvas.addEventListener("click", function(event) { 
         ctx.beginPath();
+        //draw ball at the x and y coordinate of the click
+        //offset slightly to give a cleaner placement
         ctx.arc((event.clientX-canvas.offsetLeft), (event.clientY-canvas.offsetTop), 6, 0, 2 * Math.PI);
         ctx.fill();
         console.log(event.clientX-canvas.offsetLeft);
         console.log(event.clientY-canvas.offsetTop);
+        //show how many times clicks have been done
         noClicks += 1;
         console.log(noClicks);
         
