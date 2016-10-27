@@ -45,11 +45,44 @@
         
         
 		var gravity = 0.2,
-		bounciness = .9;
+		bounciness = 1;
         //a function wrapper for the clear function 
         function clearCanvas() {
             ctx.clearRect(0, 0, W, H);
         }
+
+        function collisonDect(){
+        dx = balls[0].x -balls[1].x;
+        dy = balls[0].y -balls[1].y;
+        collision_angle = Math.atan2(dy,dx);
+
+        //calculagte speed
+        magnitude_1 = Math.sqrt(balls[0].xVel*balls[0].xVel +balls[0].yVel *balls[0].yVel );
+        //calculate ball 2
+        magnitude_2 = Math.sqrt(balls[1].xVel*balls[1].xVel +balls[1].yVel *balls[1].yVel );
+
+        direction_1 = Math.atan(balls[0].yVel, balls[0].xVel);
+        direction_2 = Math.atan(balls[1].yVel, balls[1].xVel);
+
+        new_xVel_1 = magnitude_1 * Math.cos(direction_1-collision_angle);
+
+        new_yVel_1 = magnitude_1*Math.sin(direction_1-collision_angle);
+        new_xVel_2 = magnitude_2*Math.cos(direction_2-collision_angle);
+        new_yVel_2 = magnitude_2*Math.sin(direction_2-collision_angle);
+
+        final_xVel_1 = ( (balls[0].mass-balls[1].mass) * new_xVel_1 + (balls[0].mass+balls[1].mass) * new_xVel_2) / (balls[0].mass+balls[1].mass);
+        final_xVel_2 = ( (balls[0].mass+balls[0].mass) * new_xVel_1 + (balls[1].mass-balls[0].mass) * new_xVel_2) / (balls[0].mass+balls[1].mass);
+
+        final_yVel_1 = new_yVel_1;
+        final_yVel_2 = new_yVel_2;
+
+        balls[0].xVel = Math.cos(collision_angle) * final_xVel_1 + Math.cos(collision_angle + Math.PI/2) * final_yVel_1;
+        balls[0].yVel = Math.sin(collision_angle) * final_xVel_1 + Math.sin(collision_angle + Math.PI/2) * final_yVel_1;
+        balls[1].xVel = Math.cos(collision_angle) * final_xVel_2 + Math.cos(collision_angle + Math.PI/2) * final_yVel_2;
+        balls[1].yVel = Math.sin(collision_angle) * final_xVel_2 + Math.sin(collision_angle + Math.PI/2) * final_yVel_2;
+
+        
+    }
 
         function Ball(x,y,r,xVel,yVel, mass) {
         this.x = x;
@@ -109,141 +142,53 @@
             this.y = H - this.r;
            this.yVel *= -bounciness;
             
-            // The bounciness variable denotes how force of bounce.
-            // If bounce will be great in some cases may increase in bounce height.
-            // If 0, then it will be inelastic.
         }
         else if(this.y - this.r < 0) {
             // First, reposition the ball on top of the floor and then bounce it!
             this.y = 0 + this.r;
             this.yVel *= -bounciness;
-            
-            // The bounciness variable denotes how force of bounce.
-            // If bounce will be great in some cases may increase in bounce height.
-            // If 0, then it will be inelastic.
         }
         if(this.x + this.r > W) {
             // First, reposition the ball on top of the floor and then bounce it!
             this.x = W - this.r;
             this.xVel *= -bounciness;
-            
-            // The bounciness variable denotes how force of bounce.
-            // If bounce will be great in some cases may increase in bounce height.
-            // If 0, then it will be inelastic.
         }
         else if(this.x - this.r <0) {
             // First, reposition the ball on top of the floor and then bounce it!
             this.x = 0 + this.r;
            this.xVel *= -bounciness;
-            
-            // The bounciness variable denotes how force of bounce.
-            // If bounce will be great in some cases may increase in bounce height.
-            // If 0, then it will be inelastic.
         }//end if
         }// end update function
         
         }//end the object
-    var b1 = new Ball(100,100,30,3,6,10);
-    var b2 = new Ball(200,150,20,2,4,5);
-    //var b3 = new Ball(400,450,40,7,8,10);
-    //var b4 = new Ball(50,50,10,1,3,6);
+    var balls = [];
+    balls.push(new Ball(100,100,30,3,6,10));
+    balls.push(new Ball(200,150,20,2,4,5));
+    
     
     function step() {
     clearCanvas();
-    b1.draw();
-
-    b1.update();
+    var dx = balls[0].x -balls[1].x;
+    var dy = balls[0].y -balls[1].y;   
+    var distance = Math.sqrt(dx * dx + dy * dy);
+   if (distance < balls[0].r + balls[1].r) {
+    // collision detected!
+    console.log("triggered");
+    collisonDect();
+}
+    balls[0].update();
 
     
-    b2.update();
-    b3.update();
-    b4.update();   
-    
+    balls[1].update(); 
+  
     requestAnimationFrame(step);
+
+
+
     }
     window.requestAnimationFrame(step);
     
     
-  
-
-
-
-    canvas.addEventListener("click", function(event) { 
-        //Clear the interval for the previous animation
-        //We then need to redraw this
-        clearInterval(updateInterval);
-        clearCanvas();
-        //Draw the ball in a new position
-        //Position given by user mouseClick
-        ctx.beginPath();
-        ctx.arc((event.clientX-canvas.offsetLeft), (event.clientY-canvas.offsetTop), ball.r, 0, Math.PI*2);
-        ctx.fill();
-        //Show the new ball position to user
-        console.log(event.clientX-canvas.offsetLeft);
-        console.log(event.clientY-canvas.offsetTop);
-        noClicks += 1;
-        console.log(noClicks);
-
-        //ball.updatePositon(event.clientX-canvas.offsetLeft), (event.clientY-canvas.offsetTop));
-        
-        ball.x = (event.clientX-canvas.offsetLeft);
-        ball.y = (event.clientY-canvas.offsetTop);
-        
-        //change the x and y values of ball before starting the animation again
-        // if we do not do this we will have a ball in one section and the previous animation run again
-        setInterval(update, 1000/60);
-        
-      });
-
-		// Add a Javascript event listener to the keypress event.
-		window.addEventListener("keypress", function(event) { 
-			// Just log the event to the console.
-			console.log(event);
-		});
-
-		//keypresses with jQuery
-		$(document.body).on('keydown', function(e) {
-			console.log(e.which);
-			switch (e.which) {
-
-            case 32:
-				console.log('Spacebar pressed');
-                clearInterval(updateInterval);
-                ball.draw();
-                
-               ball.xVel = 0;
-               ball.vy = 0;
-				break;
-            //User presses Up arrow key, corresponding key num is 38
-            case 38:
-				console.log('Up arrow key pressed!');
-                //Add 1 to the Y velocity 
-                
-                ball.vy += 1;
-                console.log('Y velocity now '+ball.vy);
-				break;
-
-            //User presses down arrow key, corresponding key num is 40
-            case 40:
-				console.log('Down arrow key pressed!');
-                ball.vy -= 1;
-                console.log('Y velocity now '+ball.vy);
-				break;            
-			// key code for left arrow
-			case 37:
-				console.log('left arrow key pressed!');
-                ball.xVel = ball.xVel - 2;
-                console.log('X velocity now '+ball.xVel);
-				break;
-
-			// key code for right arrow
-			case 39:
-				console.log('right arrow key pressed!');
-                 ball.xVel += 1;
-                console.log('X velocity now '+ball.xVel);
-				break;
-			}
-		});
     </script>
 
   </body>
