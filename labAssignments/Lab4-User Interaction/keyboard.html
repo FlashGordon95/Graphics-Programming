@@ -20,28 +20,24 @@
     <canvas id="canvas-for-ball"></canvas>
 
     <script type="text/javascript">
-		// Gets a handle to the element with id canvasOne.
-		var canvas = document.getElementById("canvas-for-ball");
-		// Get a 2D context for the canvas.
-		var ctx = canvas.getContext("2d");
-		// Make the fill style red.
-		ctx.fillStyle = "rgb(255, 0, 0)";
-        var noClicks = 0;
+		
+		var canvas = document.getElementById("canvas-for-ball"); // Gets a handle to the element with id canvasOne.
+		var ctx = canvas.getContext("2d");// Get a 2D context for the canvas.
+		ctx.fillStyle = "rgb(255, 0, 0)"; // Make the fill style red.
 
+        var noClicks = 0; //used to keep track of how many balls created
+        var H = 600;    //used to inisialise the height 
+        var W = 600;     //used to inisialise the width 
 
-        var H = 600;
-        var W = 600;
         canvas.height = H;
         canvas.width = W;
         
-        var ball = {},
-		gravity = 0.2,
-		bounciness = .9;
+        var gravity = 0.2; //used to decrese bounciness over time
+		var bounciness = .9; //used to determinee elasticity of object. 1 = perfectly elastic
 
-        ball = {
+        var ball = {
         x: 175,
         y: 50,
-        
         radius: 15,
         color: "red",
         
@@ -61,8 +57,6 @@
         updatePositon: function(x, y) {
             this.x = x;
             this.y = y;
-
-
         }
     };
 
@@ -73,61 +67,37 @@
 
    //updates the ball animation so that the velocity and grav can be applied
     function update() {
-        //Clear canvas for new frame
-        clearCanvas();
-        //draw the ball image
-        ball.draw();
         
-        // Add velocity to y axis 
-        ball.y += ball.vy;
-        //need to add x axis velocity
-        ball.x += ball.vx;
-
-        ball.vy += gravity;
+        clearCanvas(); //Clear canvas for new frame
+        ball.draw();  //draw the ball image
+        ball.y += ball.vy; // Add velocity to y axis 
+        ball.x += ball.vx; //need to add x axis velocity
+        ball.vy += gravity; //gravity is applied to the vertical axis
         //could add gravity to x to give distorted grav
        
-
+        /*
+        * These If-else statements take care of collisons against the border of the canvas
+        * When the ball is about to collide with a border of the canvas we want to reposition it
+        * When meeting the border the ball is repositioned to height/width divided by the radius
+        */
         if(ball.y + ball.radius > H) {
-            // First, reposition the ball on top of the floor and then bounce it!
-            ball.y = H - ball.radius;
-           ball.vy *= -bounciness;
-            
-            // The bounciness variable denotes how force of bounce.
-            // If bounce will be great in some cases may increase in bounce height.
-            // If 0, then it will be inelastic.
+            ball.y = H - ball.radius; // First, reposition the ball
+            ball.vy *= -bounciness; 
         }
         else if(ball.y - ball.radius < 0) {
-            // First, reposition the ball on top of the floor and then bounce it!
-            ball.y = 0 + ball.radius;
+            ball.y = 0 + ball.radius; // First, reposition the ball
             //ball.vy *= -bounciness;
-            
-            // The bounciness variable denotes how force of bounce.
-            // If bounce will be great in some cases may increase in bounce height.
-            // If 0, then it will be inelastic.
         }
         if(ball.x + ball.radius > W) {
-            // First, reposition the ball on top of the floor and then bounce it!
-            ball.x = W - ball.radius;
+            ball.x = W - ball.radius; // First, reposition the ball
             ball.vx *= -bounciness;
-            
-            // The bounciness variable denotes how force of bounce.
-            // If bounce will be great in some cases may increase in bounce height.
-            // If 0, then it will be inelastic.
         }
         else if(ball.x - ball.radius <0) {
-            // First, reposition the ball on top of the floor and then bounce it!
-            ball.x = 0 + ball.radius;
+            ball.x = 0 + ball.radius; // First, reposition the ball
            ball.vx *= -bounciness;
-            
-            // The bounciness variable denotes how force of bounce.
-            // If bounce will be great in some cases may increase in bounce height.
-            // If 0, then it will be inelastic.
         }
-    }
-
-    // Set interval allows us to call the event repeadetly based on time rather than indices
-    // in setInterval, 1000/x depicts fps
-    var updateInterval =  setInterval(update, 1000/60);
+        requestAnimationFrame(update);
+    }//end update()
 
     canvas.addEventListener("click", function(event) { 
         //Clear the interval for the previous animation
@@ -139,8 +109,8 @@
         ctx.beginPath();
         ctx.arc((event.clientX-canvas.offsetLeft), (event.clientY-canvas.offsetTop), ball.radius, 0, Math.PI*2);
         ctx.fill();
-        //Show the new ball position to user
-        console.log(event.clientX-canvas.offsetLeft);
+       
+        console.log(event.clientX-canvas.offsetLeft);  //Show the new ball position to user
         console.log(event.clientY-canvas.offsetTop);
         noClicks += 1;
         console.log(noClicks);
@@ -150,10 +120,9 @@
         ball.x = (event.clientX-canvas.offsetLeft);
         ball.y = (event.clientY-canvas.offsetTop);
         
-        //change the x and y values of ball before starting the animation again
-        // if we do not do this we will have a ball in one section and the previous animation run again
-        setInterval(update, 1000/60);
-        
+        //if we want to specify FPS of the animation we can use setInterval(update, 1000/60);
+        update();
+    
       });
 
 		// Add a Javascript event listener to the keypress event.

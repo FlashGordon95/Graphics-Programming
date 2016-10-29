@@ -31,7 +31,6 @@
         var color;
         
         this.draw =  function() {
-            
             // begin drawing the path 
             // fill arc circle with fill color and close again so a further drawing does not cause issues
             ctx.beginPath();
@@ -92,6 +91,7 @@
         }
         requestAnimationFrame(repeatMe); //repeat for animation
         }
+        //Translate the canvas and start the animation
         ctx.translate(50,60);
         repeatMe();
       

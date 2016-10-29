@@ -20,7 +20,7 @@
     <canvas id="canvas-for-ball"></canvas>
 
     <script type="text/javascript">
-		// Gets a handle to the element with id canvasOne.
+	    // Gets a handle to the element with id canvasOne.
 		var canvas = document.getElementById("canvas-for-ball");
 		// Get a 2D context for the canvas.
 		var ctx = canvas.getContext("2d");
@@ -37,8 +37,6 @@
 
 		ctx.fillStyle = "rgb(255, 0, 0)";
         var noClicks = 0;
-
-
         
         canvas.height = H;
         canvas.width = W;
@@ -53,7 +51,7 @@
         //when a collision is detected we need to gather the speed and angles of the collison 
         //also we need the angle of the rebound
         function collisonDect(){
-            //get distances
+        //get distances
         dx = balls[0].x -balls[1].x;
         dy = balls[0].y -balls[1].y;
         collision_angle = Math.atan2(dy,dx);
@@ -72,18 +70,17 @@
         new_yVel_1 = magnitude_1*Math.sin(direction_1-collision_angle);
         new_xVel_2 = magnitude_2*Math.cos(direction_2-collision_angle);
         new_yVel_2 = magnitude_2*Math.sin(direction_2-collision_angle);
-
+        //getting x and y final velocities
         final_xVel_1 = ( (balls[0].mass-balls[1].mass) * new_xVel_1 + (balls[0].mass+balls[1].mass) * new_xVel_2) / (balls[0].mass+balls[1].mass);
         final_xVel_2 = ( (balls[0].mass+balls[0].mass) * new_xVel_1 + (balls[1].mass-balls[0].mass) * new_xVel_2) / (balls[0].mass+balls[1].mass);
-
         final_yVel_1 = new_yVel_1;
         final_yVel_2 = new_yVel_2;
-
+        //apply the new values to the balls x and y values
         balls[0].xVel = Math.cos(collision_angle) * final_xVel_1 + Math.cos(collision_angle + Math.PI/2) * final_yVel_1;
         balls[0].yVel = Math.sin(collision_angle) * final_xVel_1 + Math.sin(collision_angle + Math.PI/2) * final_yVel_1;
         balls[1].xVel = Math.cos(collision_angle) * final_xVel_2 + Math.cos(collision_angle + Math.PI/2) * final_yVel_2;
         balls[1].yVel = Math.sin(collision_angle) * final_xVel_2 + Math.sin(collision_angle + Math.PI/2) * final_yVel_2;
-    }
+        }
 
         function Ball(x,y,r,xVel,yVel, mass) {
         this.x = x;
@@ -92,8 +89,7 @@
         this.xVel = xVel;
         this.yVel = yVel;
         this.mass = mass;
-        var color;
-        
+
         this.draw =  function() {
             // begin drawing the path 
             // fill arc circle with fill color and close again so a further drawing does not cause issues
@@ -158,32 +154,32 @@
         }// end update function
         
         }//end the object
-    var balls = [];
-    balls.push(new Ball(100,100,30,3,6,10));
-    balls.push(new Ball(200,150,20,2,4,5));
+
+        //Instantiate an array and fill it with Ball objects
+        var balls = [];
+        balls.push(new Ball(100,100,30,3,6,10));
+        balls.push(new Ball(200,150,20,2,4,5));
+        
+        //steo function which will be repeated
+        function step() {
+        //clear the canvas
+        clearCanvas();
+        //calculate the distance of the balls
+        var dx = balls[0].x -balls[1].x;
+        var dy = balls[0].y -balls[1].y;   
+        var distance = Math.sqrt(dx * dx + dy * dy);
+        
+        if (distance < balls[0].r + balls[1].r) {
+            // collision detected!
+            console.log("Collison detected");
+            collisonDect(); //deal with the collision
+        }
+        balls[0].update();
+        balls[1].update(); 
     
-    
-    function step() {
-    //clear the canvas
-    clearCanvas();
-    //calculate the distance of the balls
-    var dx = balls[0].x -balls[1].x;
-    var dy = balls[0].y -balls[1].y;   
-    var distance = Math.sqrt(dx * dx + dy * dy);
-    
-    if (distance < balls[0].r + balls[1].r) {
-        // collision detected!
-        console.log("Collison detected");
-        collisonDect();
-    }
-    balls[0].update();
-    balls[1].update(); 
-  
-    requestAnimationFrame(step);
-    }
-    window.requestAnimationFrame(step);
-    
-    
+        requestAnimationFrame(step);
+        }
+        window.requestAnimationFrame(step);            
     </script>
 
   </body>
