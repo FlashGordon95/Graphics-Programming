@@ -17,14 +17,14 @@
   <body>
 	<p>X's and O's</p>
 
-    <canvas id="tic-tac-toe-board"></canvas>
+    <canvas id="canvas"></canvas>
 
     <script type="text/javascript">
 
     var player = 1;//start with player 1
     var lineColor = "#ddd";
 
-    var canvas = document.getElementById('tic-tac-toe-board');
+    var canvas = document.getElementById('canvas');
     var context = canvas.getContext('2d');
     //initialse the game board size
     var canvasSize = 500;
@@ -32,7 +32,7 @@
     canvas.width = canvasSize;
     canvas.height = canvasSize;
     context.translate(0.5, 0.5);
-
+    //initialise the game board array and return
     function getInitialBoard (defaultValue) {
     var board = [];
 
@@ -46,50 +46,48 @@
 
     return board;
     }
-
+    //instantiate the board 
     var board = getInitialBoard("");
-
+    //add a x or O depending on the player 
     function addPlayingPiece (mouse) {
-    var xCordinate;
-    var yCordinate;
+    var xVal;
+    var yVal;
 
     for (var x = 0;x < 3;x++) {
         for (var y = 0;y < 3;y++) {
-        xCordinate = x * sectionSize;
-        yCordinate = y * sectionSize;
+        xVal = x * sectionSize;
+        yVal = y * sectionSize;
 
-        if (
-            mouse.x >= xCordinate && mouse.x <= xCordinate + sectionSize &&
-            mouse.y >= yCordinate && mouse.y <= yCordinate + sectionSize
-            ) {
+        if (mouse.x >= xVal && mouse.x <= xVal + sectionSize &&
+            mouse.y >= yVal && mouse.y <= yVal + sectionSize) {
             
-            clearPlayingArea(xCordinate, yCordinate);
+            clearPlayingArea(xVal, yVal);
 
             if (player === 1) {
-            drawX(xCordinate, yCordinate);
+            drawX(xVal, yVal);
             } else {
-            drawO(xCordinate, yCordinate);
+            drawO(xVal, yVal);
             }
         }
         }
     }
     
     }
-
-    function clearPlayingArea (xCordinate, yCordinate) {
+    //clear function
+    function clearPlayingArea (xVal, yVal) {
     context.fillStyle = "#fff";
     context.fillRect(
-        xCordinate,
-        yCordinate,
+        xVal,
+        yVal,
         sectionSize,
         sectionSize
     ); 
     }
     //draws an 'o' char in the box clicked by the user
-    function drawO (xCordinate, yCordinate) {
+    function drawO (xVal, yVal) {
     var halfSectionSize = (0.5 * sectionSize);
-    var centerX = xCordinate + halfSectionSize;
-    var centerY = yCordinate + halfSectionSize;
+    var centerX = xVal + halfSectionSize;
+    var centerY = yVal + halfSectionSize;
     var radius = (sectionSize - 100) / 2;
     var startAngle = 0 * Math.PI; 
     var endAngle = 2 * Math.PI;
@@ -101,19 +99,19 @@
     context.stroke();
     }
     //draws an 'x' char in the box clicked by the user
-    function drawX (xCordinate, yCordinate) {
+    function drawX (xVal, yVal) {
     context.strokeStyle = "#f1be32";
     context.beginPath();
     var offset = 50;
-    context.moveTo(xCordinate + offset, yCordinate + offset);
-    context.lineTo(xCordinate + sectionSize - offset, yCordinate + sectionSize - offset);
+    context.moveTo(xVal + offset, yVal + offset);
+    context.lineTo(xVal + sectionSize - offset, yVal + sectionSize - offset);
 
-    context.moveTo(xCordinate + offset, yCordinate + sectionSize - offset);
-    context.lineTo(xCordinate + sectionSize - offset, yCordinate + offset);
+    context.moveTo(xVal + offset, yVal + sectionSize - offset);
+    context.lineTo(xVal + sectionSize - offset, yVal + offset);
 
     context.stroke();
     }
-
+    //draws the border lines for the game
     function drawLines (lineWidth, strokeStyle) {
     var lineStart = 4;
     var lineLenght = canvasSize - 5;
@@ -122,17 +120,16 @@
     context.strokeStyle = strokeStyle;
     context.beginPath();
 
-    /*
-    * Horizontal lines 
-    */
+    
+    //Horizontal lines for board
+    
     for (var y = 1;y <= 2;y++) {  
         context.moveTo(lineStart, y * sectionSize);
         context.lineTo(lineLenght, y * sectionSize);
     }
 
-    /*
-    * Vertical lines 
-    */
+    //Vertical lines for board
+
     for (var x = 1;x <= 2;x++) {
         context.moveTo(x * sectionSize, lineStart);
         context.lineTo(x * sectionSize, lineLenght);
@@ -162,7 +159,6 @@
     var canvasMousePosition = getCanvasMousePosition(event);
     addPlayingPiece(canvasMousePosition);
     drawLines(10, lineColor);
-    isGameOver();
     });
     </script>
 
