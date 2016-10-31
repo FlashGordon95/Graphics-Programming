@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+
+<html>
+
+<script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
+  <head>
+    <meta charset="UTF-8">
+    <title>Canvas</title>
+
+    <style type="text/css">
+		canvas {
+			border: 1px solid grey; 
+		}
+    </style>
+
+  </head>
+
+  <body>
+
+    <canvas id="canvas-for-ball"></canvas>
+
+    <script type="text/javascript">
+	    // Gets a handle to the element with id canvasOne.
+		var canvas = document.getElementById("canvas-for-ball");
+		// Get a 2D context for the canvas.
+		var ctx = canvas.getContext("2d");
+		// Make the fill style red.
+        var H = 600;
+        var W = 600;
+
+
+        function init() {
+            canvas.height = H;
+            canvas.width = W;
+        } 
+        init();
+
+		ctx.fillStyle = "rgb(255, 0, 0)";
+        var noClicks = 0;
+        
+        canvas.height = H;
+        canvas.width = W;
+        
+        
+		var gravity = 0.2,
+		bounciness = 1;
+        //a function wrapper for the clear function 
+        function clearCanvas() {
+            ctx.clearRect(0, 0, W, H);
+        }
+        //when a collision is detected we need to gather the speed and angles of the collison 
+        //also we need the angle of the rebound
+        function collisonDect(){
+        //get distances
+        dx = balls[0].x -balls[1].x;
+        dy = balls[0].y -balls[1].y;
+        collision_angle = Math.atan2(dy,dx);
+
+        //calculagte speed of ball 1
+        magnitude_1 = Math.sqrt(balls[0].xVel*balls[0].xVel +balls[0].yVel *balls[0].yVel );
+        //calculate speed of ball 2
+        magnitude_2 = Math.sqrt(balls[1].xVel*balls[1].xVel +balls[1].yVel *balls[1].yVel );
+        //calulate new directions for the balls
+        direction_1 = Math.atan(balls[0].yVel, balls[0].xVel);
+        direction_2 = Math.atan(balls[1].yVel, balls[1].xVel);
+
+        //calculte the velocities for each ball 
+        //they should transfer energy somewhat dependings on each velocity
+        new_xVel_1 = magnitude_1 * Math.cos(direction_1-collision_angle);
+        new_yVel_1 = magnitude_1*Math.sin(direction_1-collision_angle);
+        new_xVel_2 = magnitude_2*Math.cos(direction_2-collision_angle);
+        new_yVel_2 = magnitude_2*Math.sin(direction_2-collision_angle);
+        //getting x and y final velocities
+        final_xVel_1 = ( (balls[0].mass-balls[1].mass) * new_xVel_1 + (balls[0].mass+balls[1].mass) * new_xVel_2) / (balls[0].mass+balls[1].mass);
+        final_xVel_2 = ( (balls[0].mass+balls[0].mass) * new_xVel_1 + (balls[1].mass-balls[0].mass) * new_xVel_2) / (balls[0].mass+balls[1].mass);
+        final_yVel_1 = new_yVel_1;
+        final_yVel_2 = new_yVel_2;
+        //apply the new values to the balls x and y values
+        balls[0].xVel = Math.cos(collision_angle) * final_xVel_1 + Math.cos(collision_angle + Math.PI/2) * final_yVel_1;
+        balls[0].yVel = Math.sin(collision_angle) * final_xVel_1 + Math.sin(collision_angle + Math.PI/2) * final_yVel_1;
+        balls[1].xVel = Math.cos(collision_angle) * final_xVel_2 + Math.cos(collision_angle + Math.PI/2) * final_yVel_2;
+        balls[1].yVel = Math.sin(collision_angle) * final_xVel_2 + Math.sin(collision_angle + Math.PI/2) * final_yVel_2;
+        }
+
+        function Ball(x,y,r,xVel,yVel, mass) {
+        this.x = x;
+        this.y = y;
+        this.r = r;
+        this.xVel = xVel;
+        this.yVel = yVel;
+        this.mass = mass;
+
+        this.draw =  function() {
+            // begin drawing the path 
+            // fill arc circle with fill color and close again so a further drawing does not cause issues
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.r, 0, Math.PI*2, false);
+            ctx.stroke();
+        }
+        this.resize = function(r) {
+            // begin drawing the path 
+            // fill arc circle with fill color and close again so a further drawing does not cause issues
+           this.r = r;
+        }
+        this.move = function(xpos,ypos) {
+            // begin drawing the path 
+            // fill arc circle with fill color and close again so a further drawing does not cause issues
+           this.x += xpos;
+           this.y += ypos;
+        }
+        this.setColor = function(color) {
+            // begin drawing the path 
+            // fill arc circle with fill color and close again so a further drawing does not cause issues
+           this.color = color;
+        }
+       this.move = function() {
+        if (this.position.x + this.r >= canvas.width) {
+        this.velocity.x = -this.velocity.x; }
+        }
+        this.update = function(){
+            
+        //Clear canvas for new frame
+        
+        //draw the ball image
+        this.draw();
+        
+        // Add velocity to y axis 
+        this.y += this.yVel;
+        //need to add x axis velocity
+        this.x += this.xVel;
+       
+
+        if(this.y + this.r > H) {
+            // First, reposition the ball on top of the floor and then bounce it!
+            this.y = H - this.r;
+           this.yVel *= -bounciness;
+            
+        }
+        else if(this.y - this.r < 0) {
+            // First, reposition the ball on top of the floor and then bounce it!
+            this.y = 0 + this.r;
+            this.yVel *= -bounciness;
+        }
+        if(this.x + this.r > W) {
+            // First, reposition the ball on top of the floor and then bounce it!
+            this.x = W - this.r;
+            this.xVel *= -bounciness;
+        }
+        else if(this.x - this.r <0) {
+            // First, reposition the ball on top of the floor and then bounce it!
+            this.x = 0 + this.r;
+           this.xVel *= -bounciness;
+        }//end if
+        }// end update function
+        
+        }//end the object
+
+        //Instantiate an array and fill it with Ball objects
+        var balls = [];
+        balls.push(new Ball(100,100,30,3,6,10));
+        balls.push(new Ball(200,150,20,2,4,5));
+        
+        //steo function which will be repeated
+        function step() {
+        //clear the canvas
+        clearCanvas();
+        //calculate the distance of the balls
+        var dx = balls[0].x -balls[1].x;
+        var dy = balls[0].y -balls[1].y;   
+        var distance = Math.sqrt(dx * dx + dy * dy);
+        
+        if (distance < balls[0].r + balls[1].r) {
+            // collision detected!
+            console.log("Collison detected");
+            collisonDect(); //deal with the collision
+        }
+        balls[0].update();
+        balls[1].update(); 
+    
+        requestAnimationFrame(step);
+        }
+        window.requestAnimationFrame(step);            
+    </script>
+
+  </body>
+
+</html>

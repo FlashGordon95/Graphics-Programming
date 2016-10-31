@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+
+<html>
+
+  <head>
+    <meta charset="UTF-8">
+    <title>Canvas</title>
+
+    <style type="text/css">
+      canvas {
+        border: 1px solid grey; 
+      }
+    </style>
+
+  </head>
+
+  <body>
+	<p>X's and O's</p>
+
+    <canvas id="canvas"></canvas>
+
+    <script type="text/javascript">
+
+    var player = 1;//start with player 1
+    var lineColor = "#ddd";
+
+    var canvas = document.getElementById('canvas');
+    var context = canvas.getContext('2d');
+    //initialse the game board size
+    var canvasSize = 500;
+    var sectionSize = canvasSize / 3;
+    canvas.width = canvasSize;
+    canvas.height = canvasSize;
+    context.translate(0.5, 0.5);
+    //initialise the game board array and return
+    function getInitialBoard (defaultValue) {
+    var board = [];
+
+    for (var x = 0;x < 3;x++) {
+        board.push([]);
+
+        for (var y = 0;y < 3;y++) {
+        board[x].push(defaultValue);
+        }
+    }
+
+    return board;
+    }
+    //instantiate the board 
+    var board = getInitialBoard("");
+    //add a x or O depending on the player 
+    function addPlayingPiece (mouse) {
+    var xVal;
+    var yVal;
+
+    for (var x = 0;x < 3;x++) {
+        for (var y = 0;y < 3;y++) {
+        xVal = x * sectionSize;
+        yVal = y * sectionSize;
+
+        if (mouse.x >= xVal && mouse.x <= xVal + sectionSize &&
+            mouse.y >= yVal && mouse.y <= yVal + sectionSize) {
+            
+            clearPlayingArea(xVal, yVal);
+
+            if (player === 1) {
+            drawX(xVal, yVal);
+            } else {
+            drawO(xVal, yVal);
+            }
+        }
+        }
+    }
+    
+    }
+    //clear function
+    function clearPlayingArea (xVal, yVal) {
+    context.fillStyle = "#fff";
+    context.fillRect(
+        xVal,
+        yVal,
+        sectionSize,
+        sectionSize
+    ); 
+    }
+    //draws an 'o' char in the box clicked by the user
+    function drawO (xVal, yVal) {
+    var halfSectionSize = (0.5 * sectionSize);
+    var centerX = xVal + halfSectionSize;
+    var centerY = yVal + halfSectionSize;
+    var radius = (sectionSize - 100) / 2;
+    var startAngle = 0 * Math.PI; 
+    var endAngle = 2 * Math.PI;
+
+    context.lineWidth = 10;
+    context.strokeStyle = "#01bBC2";
+    context.beginPath();
+    context.arc(centerX, centerY, radius, startAngle, endAngle);
+    context.stroke();
+    }
+    //draws an 'x' char in the box clicked by the user
+    function drawX (xVal, yVal) {
+    context.strokeStyle = "#f1be32";
+    context.beginPath();
+    var offset = 50;
+    context.moveTo(xVal + offset, yVal + offset);
+    context.lineTo(xVal + sectionSize - offset, yVal + sectionSize - offset);
+
+    context.moveTo(xVal + offset, yVal + sectionSize - offset);
+    context.lineTo(xVal + sectionSize - offset, yVal + offset);
+
+    context.stroke();
+    }
+    //draws the border lines for the game
+    function drawLines (lineWidth, strokeStyle) {
+    var lineStart = 4;
+    var lineLenght = canvasSize - 5;
+    context.lineWidth = lineWidth;
+    context.lineCap = 'round';
+    context.strokeStyle = strokeStyle;
+    context.beginPath();
+
+    
+    //Horizontal lines for board
+    
+    for (var y = 1;y <= 2;y++) {  
+        context.moveTo(lineStart, y * sectionSize);
+        context.lineTo(lineLenght, y * sectionSize);
+    }
+
+    //Vertical lines for board
+
+    for (var x = 1;x <= 2;x++) {
+        context.moveTo(x * sectionSize, lineStart);
+        context.lineTo(x * sectionSize, lineLenght);
+    }
+
+    context.stroke();
+    }
+
+    drawLines(10, lineColor);
+
+    function getCanvasMousePosition (event) {
+    var rect = canvas.getBoundingClientRect();
+
+    return {
+        x: event.clientX - rect.left,
+        y: event.clientY - rect.top
+    }
+    }
+    //checks for mouseup key and then changes the player
+    canvas.addEventListener('mouseup', function (event) {
+    if (player === 1) {
+        player = 2;
+    } else {
+        player = 1;
+    }
+
+    var canvasMousePosition = getCanvasMousePosition(event);
+    addPlayingPiece(canvasMousePosition);
+    drawLines(10, lineColor);
+    });
+    </script>
+
+  </body>
+
+</html>

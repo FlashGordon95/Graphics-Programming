@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Transformations</title>
+    <meta charset="UTF-8">
+    <style type="text/css"></style>
+  </head>
+  <body>
+       <canvas id="transcan" style="border:1px solid #000000;"></canvas>
+
+     <script type="text/javascript">
+        var canvas = document.getElementById('transcan'); 
+        var tempimg = document.createElement('canvas');
+        var ctx = canvas.getContext('2d');
+        var H = 600;
+        var W = 600;
+        var steps=0;
+        var rotations=0;
+       
+        //initialise some values
+        function init() {
+            canvas.height = H;
+            canvas.width = W;
+        } 
+        init();
+        //Pac Man object , contains variables and functions
+        function PacMan(x,y,r) {
+        this.x = x;
+        this.y = y;
+        this.r = r;
+        var color;
+        
+        this.draw =  function() {
+            // begin drawing the path 
+            // fill arc circle with fill color and close again so a further drawing does not cause issues
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.r, 0.25 * Math.PI, 1.25 * Math.PI, false);
+            ctx.fillStyle = "rgb(255, 255, 0)";
+            ctx.fill();
+            ctx.closePath();
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.r, 0.75 * Math.PI, 1.75 * Math.PI, false);
+            ctx.fill();
+
+            //draws the eye of pacman
+            ctx.beginPath();
+            ctx.arc(this.x, (this.y-20), (this.r/5), 0, 2 * Math.PI, false);
+            ctx.fillStyle = "rgb(0, 0, 0)";
+            ctx.fill();
+         }
+        }//end PacMan object
+
+        var pac1 = new PacMan(0,0,40);
+        //clears the canvas using the transform function
+        function clear() {
+        ctx.save();
+        ctx.setTransform(1, 0, 0, 1, 0, 0); 
+        ctx.clearRect(0, 0, canvas.width, canvas.height); 
+        ctx.rect(100,120,300,300);
+        ctx.stroke();
+        ctx.restore();
+        }
+      
+        function repeatMe() {
+        //Clear canvas for new frame
+        clear();
+        //use the PacMan objects Draw function
+        pac1.draw();
+        //translate the canvas forward along the x axis by 1px
+        //this gives the impression of object movement 
+        //in reality the canvas is moving 
+        ctx.translate(2,0);
+        //increment the steps counter
+        steps+= 2;
+
+        //when pacman has reached the third corner to turn scale him back to his previous scale
+        //this needs to be above the rotation so that it happens beforehand
+        if(steps == 1200){
+          ctx.scale(1,-1);
+          console.log("Third corner hit , scaling pacman back to normal");
+        }
+        //every 400 steps we want to turn the pacman so that the journey is continued facing the right way 
+        if(steps % 400 == 0){
+          ctx.rotate(90*Math.PI/180); //rotate the canvas 90 degrees, a conversion to radians is needed
+          //@Ryan Gordon - G00326349
+          console.log("Step count triggered, rotating now");
+        }
+        if (steps == 800){
+        ctx.scale(1, -1); //inverses the pacman object , after 180 turn the object would appear upside down without this
+        console.log("Second corner hit, applying inverse scale to pacman");
+        }
+        requestAnimationFrame(repeatMe); //repeat for animation
+        }
+        //Translate the canvas and start the animation
+        ctx.translate(50,60);
+        repeatMe();
+      
+         </script>
+  </body>
+</html>
