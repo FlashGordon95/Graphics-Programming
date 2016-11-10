@@ -12,7 +12,7 @@
 </head>
 
 <body>
-    <svg width="600" height="600">
+    <svg id="mySVGElement" width="600" height="600">
         <!-- SVG Rectangle starting at point (10,10) with 100 width and 200 height -->
         <rect x="10" y="10" width="100" height="200" style="fill:blue;stroke-width:5;" />
          <!-- SVG Circle starting at point (100,100) with 20 radius -->
@@ -23,6 +23,27 @@
     </svg>
 
     <script type="text/javascript">
+        var element = document.getElementById(mySVGElement);
+        xOffset = 100;
+        yOffset = 100;
+        var offset = {
+            x: xOffset,
+            y: yOffset
+        }
+
+        function translateElement(element, distance) {
+            console.log("Hello in the function translateElement");
+
+            setTimeout(function() {
+                element.setAttribute('transform', 'translate(30,100)');
+            }, 2000);
+        }
+
+
+        setTimeout(function() {
+            element = document.getElementById(mySVGElement);
+            translateElement(element, offset)
+        }, 3000);
     </script>
 </body>
 

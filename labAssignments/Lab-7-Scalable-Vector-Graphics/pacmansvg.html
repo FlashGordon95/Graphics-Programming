@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <!-- Advanced Exercise 1 Pacman SVG G00326349 -->
+    <style type="text/css">
+        #Mouth1 {
+            transform-origin: top left;
+            animation: lower-jaw .25s linear infinite alternate;
+        }
+        
+        #Mouth2 {
+            transform-origin: bottom left;
+            animation: upper-jaw .25s linear infinite alternate;
+        }
+        
+        #PacMan {
+            transform-origin: center center;
+            transition: all .2s ease;
+        }
+        
+        @keyframes lower-jaw {
+            0% {}
+            50% {
+                transform: rotate(30deg);
+            }
+            100% {
+                transform: rotate(0deg);
+            }
+        }
+        
+        @keyframes upper-jaw {
+            0% {}
+            50% {
+                transform: rotate(-30deg);
+            }
+            100% {
+                transform: rotate(0deg);
+            }
+        }
+        
+        circle {
+            fill: green;
+            stroke: red;
+            stroke-width: 3;
+        }
+    </style>
+</head>
+
+<body>
+    <svg id="mySVGElement" width="800" height="800">
+
+ <g id="PacMan">
+    <path id="Body" d="M242.893,166.616c-17.161,48.556 -63.492,83.384 -117.893,83.384c-68.989,0 -125,-56.011 -125,-125c0,-68.989 56.011,-125 125,-125c52.892,0 98.155,32.922 116.398,79.374c-32.851,12.86 -116.233,45.807 -115.9,45.607c0.332,-0.199 85.618,30.449 117.395,41.635Z"
+    style="fill:#fe0; stroke:black;" />
+    <path id="Mouth2" d="M241.391,79.349c6.463,13.523 9.038,28.877 8.612,45.644l-124.938,0.011l116.326,-45.655Z" style="fill:#fe0;" />
+    <path id="Mouth1" d="M242.666,166.576c5.484,-13.989 8.291,-27.865 7.37,-41.583l-125.037,-0.038l117.667,41.621Z" style="fill:#fe0;" />
+  </g>
+             
+
+ </svg>
+
+
+    <script type="text/javascript">
+        var el = document.getElementById("mySVGElement");
+        for (var i = 0; i < 100; i++) {
+           
+        }
+
+         setTimeout(function() {
+                el.setAttribute("transform", "translate(100,100)");
+            }, 1000);
+    </script>
+</body>
+
+</html>
