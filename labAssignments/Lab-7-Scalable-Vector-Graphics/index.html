@@ -2,7 +2,13 @@
 <html>
 
 <head>
-    <style type="text/css"></style>
+    <style type="text/css">
+        circle {
+            fill: green;
+            stroke: black;
+            stroke-width: 3;
+        }
+    </style>
 </head>
 
 <body>
@@ -10,7 +16,8 @@
         <!-- SVG Rectangle starting at point (10,10) with 100 width and 200 height -->
         <rect x="10" y="10" width="100" height="200" style="fill:blue;stroke-width:5;" />
          <!-- SVG Circle starting at point (100,100) with 20 radius -->
-        <circle cx="100" cy="100" r="20" stroke="green" stroke-width="4" fill="green" />
+         <!-- Putting the circle tag below the rect means the circle is drawn on top of rather than behind the rect -->
+        <circle cx="100" cy="100" r="20" />
         <!-- SVG Text starting at point (50,50) with 24 font and my name displayed -->
         <text x="50" y="50" font-size="24" fill="red">Ryan Gordon</text>
     </svg>
