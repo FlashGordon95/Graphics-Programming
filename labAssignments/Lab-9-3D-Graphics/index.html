@@ -22,7 +22,7 @@
         var sphereGeometry = new THREE.SphereGeometry(14, 20, 20);
         var meshMaterial = new THREE.MeshLambertMaterial({
             color: 0xFF9900,
-            wireframe: true
+            wireframe: false
         });
         var directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
         directionalLight.position.set(0, 1, 2);
@@ -31,24 +31,31 @@
         scene.add(sphere);
 
 
-        camera.position.z = 40;
+        camera.position.z = 700;
         // add subtle ambient lighting
         var ambientLight = new THREE.AmbientLight(0x0c0c0c);
         scene.add(ambientLight);
         // add spotlight for the shadows
         var spotLight = new THREE.SpotLight(0xffffff);
-        spotLight.position.set(-30, 60, 60);
+        spotLight.position.set(-20, 20, 20);
         spotLight.castShadow = true;
         scene.add(spotLight);
 
+        renderer.shadowMap.enabled = true;
+        renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
-        
         document.body.appendChild(renderer.domElement);
         var render = function() {
             requestAnimationFrame(render);
+            sphere.translateX(2);
 
-            sphere.rotation.x += 0.1;
-            sphere.rotation.y += 0.1;
+            if (sphere.position.x == 800) {
+                console.log("Trigger");
+                sphere.rotate = 0.5;
+            } else if (sphere.position.x > 800) {
+                console.log("Triggered 2");
+                sphere.translateX(3);
+            }
 
             renderer.render(scene, camera);
         };
