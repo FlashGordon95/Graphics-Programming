@@ -23,17 +23,22 @@
             var y = d3.scaleLinear()
                 .domain([0, 80])
                 .range([200, 0]);
+
             var parseDate = d3.timeParse(data.date);
+
+
+
 
             var x = d3.scaleTime()
                 .domain(d3.extent(data, function(d) {
                     return parseDate(d["Date"]);
                 }))
                 .range([0, width]);
+
             var xAxis = d3.axisBottom(x)
-                .ticks;
-            var yAxis = d3.axisBottom(y)
-                .ticks;
+                .ticks(1);
+            var yAxis = d3.axisLeft(y)
+                .ticks(10);
 
             var valueline = d3.line()
                 .x(function(d) {
@@ -64,7 +69,8 @@
 
         function callback(json) {
             data = json.currency;
-            console.log(data)
+            console.log(data);
+
             plotCurrencyData(data);
         }
         $.ajax({
