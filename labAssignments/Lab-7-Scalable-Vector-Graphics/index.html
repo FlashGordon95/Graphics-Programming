@@ -31,18 +31,25 @@
             y: yOffset
         }
 
-        function translateElement(element, distance) {
-            console.log("Hello in the function translateElement");
+        function translateElement(myElement, distance) {
+            // Getting
+            var xforms = myElement.transform.baseVal; // An SVGTransformList
+            var firstXForm = xforms.getItem(0); // An SVGTransform
+            if (firstXForm.type == SVGTransform.SVG_TRANSFORM_TRANSLATE) {
+                var firstX = firstXForm.matrix.e,
+                    firstY = firstXForm.matrix.f;
+            }
 
-            setTimeout(function() {
-                element.setAttribute('transform', 'translate(30,100)');
-            }, 2000);
+            // Setting
+            myElement.transform.baseVal.getItem(0).setTranslate(30, 100);
         }
 
 
         setTimeout(function() {
             element = document.getElementById(mySVGElement);
-            translateElement(element, offset)
+            console.log("Hello in the function translateElement");
+
+            translateElement(element, offset);
         }, 3000);
     </script>
 </body>

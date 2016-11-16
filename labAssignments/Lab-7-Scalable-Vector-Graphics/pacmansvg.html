@@ -48,9 +48,9 @@
 </head>
 
 <body>
-    <svg id="mySVGElement" width="800" height="800">
+    <svg id="mySVGElement" version="1.1" width="800" height="800" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
 
- <g id="PacMan">
+ <g id="PacMan" >
     <path id="Body" d="M242.893,166.616c-17.161,48.556 -63.492,83.384 -117.893,83.384c-68.989,0 -125,-56.011 -125,-125c0,-68.989 56.011,-125 125,-125c52.892,0 98.155,32.922 116.398,79.374c-32.851,12.86 -116.233,45.807 -115.9,45.607c0.332,-0.199 85.618,30.449 117.395,41.635Z"
     style="fill:#fe0; stroke:black;" />
     <path id="Mouth2" d="M241.391,79.349c6.463,13.523 9.038,28.877 8.612,45.644l-124.938,0.011l116.326,-45.655Z" style="fill:#fe0;" />
@@ -62,14 +62,28 @@
 
 
     <script type="text/javascript">
-        var el = document.getElementById("mySVGElement");
-        for (var i = 0; i < 100; i++) {
-           
+        function translateElement(myElement) {
+
+
+            // Setting
+            myElement.transform.baseVal.getItem(0).setTranslate(30, 100);
         }
 
-         setTimeout(function() {
-                el.setAttribute("transform", "translate(100,100)");
-            }, 1000);
+
+        setTimeout(function() {
+            var el = document.getElementById("mySVGElement");
+            el.setAttributeNS(null, "cx", 900);
+
+
+            var svgDoc = el.contentDocument;
+            var circle = svgDoc.getElementById("PacMan");
+
+            console.log("Hello in the function translateElement");
+            circle.setAttributeNS(null, "cx", 200);
+
+
+            translateElement(el);
+        }, 3000);
     </script>
 </body>
 

@@ -31,7 +31,7 @@
         scene.add(sphere);
 
 
-        camera.position.z = 700;
+        camera.position.z = 70;
         // add subtle ambient lighting
         var ambientLight = new THREE.AmbientLight(0x0c0c0c);
         scene.add(ambientLight);
@@ -45,18 +45,22 @@
         renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
         document.body.appendChild(renderer.domElement);
+
+        var renderDirection = 2;
         var render = function() {
             requestAnimationFrame(render);
-            sphere.translateX(2);
+            sphere.translateX(renderDirection);
 
-            if (sphere.position.x == 800) {
-                console.log("Trigger");
-                sphere.rotate = 0.5;
-            } else if (sphere.position.x > 800) {
-                console.log("Triggered 2");
+            if (sphere.position.x == 0) {
+                console.log("Trigger 800");
                 sphere.translateX(3);
+                renderDirection += 2;
+            } else if (sphere.position.x == 200) {
+                console.log("Triggered 200");
+                sphere.translateX(3);
+                renderDirection = renderDirection - 2;
             }
-
+            console.log(sphere.position.x);
             renderer.render(scene, camera);
         };
 

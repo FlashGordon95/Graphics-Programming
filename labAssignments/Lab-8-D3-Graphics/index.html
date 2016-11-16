@@ -11,10 +11,55 @@
 
 <body>
     <script type="text/javascript">
-        plotCurrencyData(){
-            var margin = {top:50,right:50,bottom:50,left:50},
-            width = 900 - margin.left - margin.right,
-            height = 670 - margin.top - margin.bottom;
+        function plotCurrencyData(data) {
+            var margin = {
+                    top: 50,
+                    right: 50,
+                    bottom: 50,
+                    left: 50
+                },
+                width = 900 - margin.left - margin.right,
+                height = 670 - margin.top - margin.bottom;
+            var y = d3.scaleLinear()
+                .domain([0, 80])
+                .range([200, 0]);
+            var parseDate = d3.timeParse(data.date);
+
+            var x = d3.scaleTime()
+                .domain(d3.extent(data, function(d) {
+                    return parseDate(d["Date"]);
+                }))
+                .range([0, width]);
+            var xAxis = d3.axisBottom(x)
+                .ticks;
+            var yAxis = d3.axisBottom(y)
+                .ticks;
+
+            var valueline = d3.line()
+                .x(function(d) {
+                    return x(parseDate(d["Date"]));
+                })
+                .y(function(d) {
+                    return y(d["GBP/EUR"]);
+                });
+
+            var svg = d3.select('body')
+                .append("SVG")
+                .attr("width", width + margin.left + margin.right)
+                .attr("height", height + margin.top + margin.top)
+                .append("g")
+                .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+            svg.append('g')
+                .attr('class', 'x axis')
+                .call(xAxis);
+            svg.append('g')
+                .attr('class', 'y axis')
+                .call(yAxis);
+
+
+            //draw path
+            svg.append("path")
+                .attr("d", valueline(data))
         }
 
         function callback(json) {
