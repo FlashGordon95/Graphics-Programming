@@ -33,7 +33,7 @@
         scene.add(sphere);
 
 
-        camera.position.z = 700;
+        camera.position.z = 40;
         // add subtle ambient lighting
         var ambientLight = new THREE.AmbientLight(0x0c0c0c);
         scene.add(ambientLight);
@@ -48,7 +48,7 @@
 
         document.body.appendChild(renderer.domElement);
 
-        var renderDirection = 2;
+        var renderDirection = 0;
         var render = function() {
             requestAnimationFrame(render);
             sphere.translateX(renderDirection);
@@ -64,24 +64,28 @@
                 // key code for left arrow
                 case 37:
                     console.log('left arrow key pressed!');
-                    renderDirection = renderDirection - 2;
+                    renderDirection = renderDirection - 1;
                     console.log('X velocity now ' + renderDirection);
                     break;
 
                     // key code for right arrow
                 case 39:
                     console.log('right arrow key pressed!');
-                    renderDirection += 2;
+                    renderDirection += 1;
                     console.log('X velocity now ' + renderDirection);
                     break;
 
                 case 38:
+                    console.log('up arrow key pressed!');
                     camera.position.z = camera.position.z + 2;
+                    console.log('Camera Zoomed. Camera Now:' + camera.position.z);
                     break;
 
                     //User presses down arrow key, corresponding key num is 40
                 case 40:
+                    console.log('up arrow key pressed!');
                     camera.position.z = camera.position.z - 2;
+                    console.log('Camera Zoomed. Camera Now:' + camera.position.z);
                     break;
                 case 65:
                     meshMaterial.color.setHex(0x0000FF);
