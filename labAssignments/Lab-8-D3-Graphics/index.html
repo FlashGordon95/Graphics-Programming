@@ -20,14 +20,16 @@
                 },
                 width = 900 - margin.left - margin.right,
                 height = 670 - margin.top - margin.bottom;
+
+
+            var parseDate = d3.timeParse("%d/%b/%y");
+
+
             var y = d3.scaleLinear()
-                .domain([0, 80])
+                .domain(d3.extent(data, function(d) {
+                    return d["GBP/EUR"]
+                }))
                 .range([height, 0]);
-
-            var parseDate = d3.timeParse("%B/%d");
-
-
-
 
             var x = d3.scaleTime()
                 .domain(d3.extent(data, function(d) {
@@ -35,10 +37,12 @@
                 }))
                 .range([0, width]);
 
-            var xAxis = d3.axisBottom(x)
-                .ticks(1);
+
             var yAxis = d3.axisLeft(y)
                 .ticks(10);
+
+            var xAxis = d3.axisBottom(x)
+                .ticks(10)
 
             var valueline = d3.line()
                 .x(function(d) {
@@ -49,25 +53,26 @@
                 });
 
             var svg = d3.select('body')
-                .append("SVG")
+                .append("svg")
                 .attr("width", width + margin.left + margin.right)
                 .attr("height", height + margin.top + margin.bottom)
 
             .append("g")
                 .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-            svg.append('g')
-                .attr('class', 'x axis')
-                .call(xAxis);
-
-            svg.append('g')
-                .attr('class', 'y axis')
+            svg.append("g")
+                .attr("class", "y axis")
                 .call(yAxis);
 
+            svg.append("g")
+                .attr("class", "x axis")
+                .call(xAxis);
 
-            //draw path
+            // Add the valueline path.
             svg.append("path")
                 .attr("d", valueline(data));
+
+
         }
 
         function callback(json) {
