@@ -22,9 +22,9 @@
                 height = 670 - margin.top - margin.bottom;
             var y = d3.scaleLinear()
                 .domain([0, 80])
-                .range([200, 0]);
+                .range([height, 0]);
 
-            var parseDate = d3.timeParse(data.date);
+            var parseDate = d3.timeParse("%B/%d");
 
 
 
@@ -51,12 +51,15 @@
             var svg = d3.select('body')
                 .append("SVG")
                 .attr("width", width + margin.left + margin.right)
-                .attr("height", height + margin.top + margin.top)
-                .append("g")
-                .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+                .attr("height", height + margin.top + margin.bottom)
+
+            .append("g")
+                .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
             svg.append('g')
                 .attr('class', 'x axis')
                 .call(xAxis);
+
             svg.append('g')
                 .attr('class', 'y axis')
                 .call(yAxis);
@@ -64,7 +67,7 @@
 
             //draw path
             svg.append("path")
-                .attr("d", valueline(data))
+                .attr("d", valueline(data));
         }
 
         function callback(json) {
@@ -76,7 +79,7 @@
         $.ajax({
             url: "http://52.169.223.50/graphics/currency.json",
             dataType: "jsonp"
-        })
+        });
     </script>
 
 </body>
