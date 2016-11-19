@@ -3,7 +3,9 @@
 
 <head>
     <!-- Advanced Exercise 1 Pacman SVG G00326349 -->
+    <!-- Css Used for the PacMan. I wanted an animated mouth rather than the same one from earlier lab -->
     <style type="text/css">
+    
         #Mouth1 {
             transform-origin: top left;
             animation: lower-jaw .25s linear infinite alternate;
@@ -48,6 +50,7 @@
 </head>
 
 <body>
+    <!-- Add a SVG element with 3 parts which make a pacman -->
     <svg id="mySVGElement" version="1.1" width="800" height="800" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
 
  <g id="PacMan" >
@@ -69,7 +72,7 @@
             myElement.transform.baseVal.getItem(0).setTranslate(30, 100);
         }
 
-
+        //make the pacman move positoon after x secs
         setTimeout(function() {
             var el = document.getElementById("mySVGElement");
             el.setAttributeNS(null, "cx", 900);

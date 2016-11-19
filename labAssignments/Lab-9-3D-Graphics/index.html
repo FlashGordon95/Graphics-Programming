@@ -14,38 +14,41 @@
     <script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
 
     <script type="text/javascript">
+        //instantiate the scene
         var scene = new THREE.Scene();
         var camera = new THREE.PerspectiveCamera(100, window.innerWidth / window.innerHeight, 4, 1000);
-
+        //set initial position of the camera
         camera.position.set(75, 125, 300);
         camera.lookAt(scene.position);
+        //set up the renderer and initialise its size
         var renderer = new THREE.WebGLRenderer();
         renderer.setSize(window.innerWidth, window.innerHeight);
 
 
         var sphereGeometry = new THREE.SphereGeometry(14, 20, 20);
+        //this is te material that will encompass the shape
         var meshMaterial = new THREE.MeshLambertMaterial({
             color: 0xFF9900,
             wireframe: true
         });
-
+        //construct the sphere from the pieces we have and add to the scene
         var sphere = new THREE.Mesh(sphereGeometry, meshMaterial);
         scene.add(sphere);
 
 
         camera.position.z = 40;
-        // add subtle ambient lighting
+        // add subtle ambient lighting to the scene
         var ambientLight = new THREE.AmbientLight(0x0c0c0c);
         scene.add(ambientLight);
-        // add spotlight for the shadows
+        // add spotlight for the shadows to the scene
         var spotLight = new THREE.SpotLight(0xffffff);
         spotLight.position.set(100, 100, 100);
         spotLight.castShadow = true;
         scene.add(spotLight);
 
 
-        //Plane
-        // plane
+        // plane which will serve as the floor
+        //
         var geometry = new THREE.PlaneGeometry(100, 300);
         var material = new THREE.MeshBasicMaterial({
             color: 0x0000ff
@@ -56,59 +59,72 @@
 
         renderer.shadowMap.enabled = true;
         renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+        //camera helper which shows the path of the spotlight 
         var helper = new THREE.CameraHelper(spotLight.shadow.camera);
         scene.add(helper);
 
         document.body.appendChild(renderer.domElement);
 
+        //renderDirection used to change velocity of the shape
         var renderDirection = 0;
         var render = function() {
-            requestAnimationFrame(render);
-            sphere.translateX(renderDirection);
-
+            requestAnimationFrame(render); //requestAnimationFrame will keeps a 60 FPS rendering but will pause when we leave page
+            
+            sphere.translateX(renderDirection); //add motion to the shape equal to renderDirection
             sphere.translateZ(renderDirection);
-            sphere.rotation.x += 0.1
+            sphere.rotation.x += 0.1; //rotation means the shape will not take a direct line 
 
-            console.log(sphere.position.x);
-            renderer.render(scene, camera);
+            console.log(sphere.position.x); //log where on the x axis the shape is
+            renderer.render(scene, camera); //run the rendering function
         };
 
         render();
+        //jQuery keypresses used for controlling functions
+        //movement , color changes and more are controlled by jQuery
         $(document.body).on('keydown', function(e) {
             console.log(e.which);
             switch (e.which) {
                 // key code for left arrow
+                //when left key pressed negative velocity added to shape
                 case 37:
                     console.log('left arrow key pressed!');
                     renderDirection = renderDirection - 1;
                     console.log('X velocity now ' + renderDirection);
                     break;
 
-                    // key code for right arrow
+                  //when left key pressed positive velocity added to shape
                 case 39:
                     console.log('right arrow key pressed!');
                     renderDirection += 1;
                     console.log('X velocity now ' + renderDirection);
                     break;
-
+                // key code for up arrow
+                //when up key pressed camera moved further away from shape
                 case 38:
                     console.log('up arrow key pressed!');
                     camera.position.z = camera.position.z + 2;
                     console.log('Camera Zoomed. Camera Now:' + camera.position.z);
                     break;
 
-                    //User presses down arrow key, corresponding key num is 40
+                 // key code for down arrow
+                //when up key pressed camera moved closer to shape
                 case 40:
                     console.log('up arrow key pressed!');
                     camera.position.z = camera.position.z - 2;
                     console.log('Camera Zoomed. Camera Now:' + camera.position.z);
                     break;
+                // key code for 'a'
+                //when 'a' key pressed a colour is applied
                 case 65:
                     meshMaterial.color.setHex(0x0000FF);
                     break;
+                // key code for 'a'
+                //when 'a' key pressed a colour is applied
                 case 83:
                     meshMaterial.color.setHex(0xFF3333);
                     break;
+                // key code for 'a'
+                //when 'a' key pressed a colour is applied
                 case 68:
                     meshMaterial.color.setHex(0x00FFFF);
                     break;
