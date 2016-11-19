@@ -15,8 +15,10 @@
 
     <script type="text/javascript">
         var scene = new THREE.Scene();
-        var camera = new THREE.PerspectiveCamera(80, window.innerWidth / window.innerHeight, 0.1, 1000);
+        var camera = new THREE.PerspectiveCamera(100, window.innerWidth / window.innerHeight, 4, 1000);
 
+        camera.position.set(75, 125, 300);
+        camera.lookAt(scene.position);
         var renderer = new THREE.WebGLRenderer();
         renderer.setSize(window.innerWidth, window.innerHeight);
 
@@ -24,11 +26,9 @@
         var sphereGeometry = new THREE.SphereGeometry(14, 20, 20);
         var meshMaterial = new THREE.MeshLambertMaterial({
             color: 0xFF9900,
-            wireframe: false
+            wireframe: true
         });
-        var directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
-        directionalLight.position.set(0, 1, 2);
-        scene.add(directionalLight);
+
         var sphere = new THREE.Mesh(sphereGeometry, meshMaterial);
         scene.add(sphere);
 
@@ -39,12 +39,25 @@
         scene.add(ambientLight);
         // add spotlight for the shadows
         var spotLight = new THREE.SpotLight(0xffffff);
-        spotLight.position.set(-20, 20, 20);
+        spotLight.position.set(100, 100, 100);
         spotLight.castShadow = true;
         scene.add(spotLight);
 
+
+        //Plane
+        // plane
+        var geometry = new THREE.PlaneGeometry(100, 300);
+        var material = new THREE.MeshBasicMaterial({
+            color: 0x0000ff
+        });
+        var mesh = new THREE.Mesh(geometry, material);
+        scene.add(mesh);
+
+
         renderer.shadowMap.enabled = true;
         renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+        var helper = new THREE.CameraHelper(spotLight.shadow.camera);
+        scene.add(helper);
 
         document.body.appendChild(renderer.domElement);
 
@@ -52,6 +65,9 @@
         var render = function() {
             requestAnimationFrame(render);
             sphere.translateX(renderDirection);
+
+            sphere.translateZ(renderDirection);
+            sphere.rotation.x += 0.1
 
             console.log(sphere.position.x);
             renderer.render(scene, camera);
