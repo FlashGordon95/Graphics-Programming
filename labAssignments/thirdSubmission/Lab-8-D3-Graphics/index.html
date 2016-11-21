@@ -80,7 +80,17 @@
                     return y(d.close);
                 });
 
+            svg.append("text") // text label for the y axis
+                .attr("x", -25)
+                .attr("y", (height + margin.bottom) / 2)
+                .style("text-anchor", "middle")
+                .text("GBP/EUR");
 
+            svg.append("text") // text label for the x axis
+                .attr("x", 400)
+                .attr("y", height + margin.bottom)
+                .style("text-anchor", "middle")
+                .text("Date");
             // Add the valueline path to the SVG
             svg.append("path")
                 .data([data])
@@ -100,6 +110,7 @@
         } //plotCurrencyData()
 
         function callback(json) {
+
             data = json.currency;
             console.log(data); //log the data in console for verification
 
